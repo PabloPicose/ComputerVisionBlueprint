@@ -63,13 +63,13 @@ QtNodes::NodeDataType BlurModel::dataType(QtNodes::PortType const portType, QtNo
 void BlurModel::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNodes::PortIndex portIndex) {
     switch (portIndex) {
         case 0: {
-            m_inPixmapData = std::dynamic_pointer_cast<PixmapData>(nodeData);
-            if (!m_inPixmapData.lock()) {
-                m_outPixmapData.reset();
+            m_inImageData = std::dynamic_pointer_cast<ImageData>(nodeData);
+            if (!m_inImageData.lock()) {
+                m_outImageData.reset();
                 emit dataUpdated(0);
                 return;
             }else {
-                m_lastPixmapToProcess = getPixmapToProcess();
+                m_lastImageToProcess = getImageToProcess();
             }
         }
         break;
@@ -96,7 +96,7 @@ void BlurModel::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtN
 }
 
 std::shared_ptr<QtNodes::NodeData> BlurModel::outData(const QtNodes::PortIndex port) {
-    return m_outPixmapData;
+    return m_outImageData;
 }
 
 QWidget* BlurModel::embeddedWidget() {
@@ -112,7 +112,7 @@ QWidget* BlurModel::embeddedWidget() {
             } else {
                 m_ui->lbl_warn_width->setVisible(true);
             }
-            m_lastPixmapToProcess = getPixmapToProcess();
+            m_lastImageToProcess = getImageToProcess();
             requestProcess();
         });
         // connect sb_height QSpinBox to signal valueChanged
@@ -122,7 +122,7 @@ QWidget* BlurModel::embeddedWidget() {
             } else {
                 m_ui->lbl_warn_height->setVisible(true);
             }
-            m_lastPixmapToProcess = getPixmapToProcess();
+            m_lastImageToProcess = getImageToProcess();
             requestProcess();
         });
         m_widget->setMaximumSize(m_widget->sizeHint());
@@ -130,42 +130,42 @@ QWidget* BlurModel::embeddedWidget() {
     return m_widget;
 }
 
-QPixmap BlurModel::processImage(const QSize& size, const QPixmap& pixmap) {
+QImage BlurModel::processImage(const QSize& size, const QImage& image) {
     const int width = size.width();
     const int height = size.height();
-    QPixmap result;
+    QImage result;
     try {
-        const auto mat = QPixmapToMat(pixmap);
+        const auto mat = QImageToMat(image);
         cv::Mat matResult;
         cv::blur(mat, matResult, cv::Size(width, height));
-        result = MatToQPixmap(matResult);
+        result = MatToQImage(matResult);
     } catch (const std::exception& e) {
         qCritical() << e.what();
     }
     return result;
 }
 
-QPixmap BlurModel::getPixmapToProcess() {
-    const auto pixmapPtr = m_inPixmapData.lock();
-    if (!pixmapPtr) {
-        return QPixmap();
+QImage BlurModel::getImageToProcess() const {
+    const auto imagePtr = m_inImageData.lock();
+    if (!imagePtr) {
+        return QImage();
     }
-    return pixmapPtr->pixmap();
+    return imagePtr->image();
 }
 
 void BlurModel::processFinished() {
-    m_outPixmapData = std::make_shared<PixmapData>(m_watcher.result());
+    m_outImageData = std::make_shared<ImageData>(m_watcher.result());
     Q_EMIT dataUpdated(0);
     requestProcess();
 }
 
 void BlurModel::requestProcess() {
-    if (m_watcher.isRunning() || m_lastPixmapToProcess.isNull()) {
+    if (m_watcher.isRunning() || m_lastImageToProcess.isNull()) {
         return;
     }
     const auto future = QtConcurrent::run(processImage,
                                           QSize(m_ui->sb_width->value(), m_ui->sb_height->value()),
-                                          m_lastPixmapToProcess);
-    m_lastPixmapToProcess = QPixmap();
+                                           m_lastImageToProcess);
+    m_lastImageToProcess= QImage();
     m_watcher.setFuture(future);
 }

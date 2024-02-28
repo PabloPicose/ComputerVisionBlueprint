@@ -11,5 +11,6 @@
 #include "Nodes/Data/NumericalData.h"
 #include "Nodes/Data/PixmapData.hpp"
 #include "Nodes/Data/SizeData.h"
+#include "Nodes/Data/ImageData.h"
 
 #endif //DATAINCLUDE_H

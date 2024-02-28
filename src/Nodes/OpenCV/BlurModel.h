@@ -9,10 +9,10 @@
 #include <QtNodes/NodeDelegateModel>
 #include <QReadWriteLock>
 #include <QFutureWatcher>
+#include "Nodes/Data/ImageData.h"
 
 
 class SizeData;
-class PixmapData;
 
 namespace Ui {
     class BlurForm;
@@ -41,9 +41,9 @@ public:
     QWidget* embeddedWidget() override;
 
 private:
-    static QPixmap processImage(const QSize& size, const QPixmap& pixmap);
+    static QImage processImage(const QSize& size, const QImage& image);
 
-    QPixmap getPixmapToProcess();
+    QImage getImageToProcess() const;
 
 private slots:
     void processFinished();
@@ -54,12 +54,12 @@ private:
     QWidget* m_widget = nullptr;
     Ui::BlurForm* m_ui = nullptr;
 
-    std::weak_ptr<PixmapData> m_inPixmapData;
-    std::shared_ptr<PixmapData> m_outPixmapData;
+    std::weak_ptr<ImageData> m_inImageData;
+    std::shared_ptr<ImageData> m_outImageData;
 
-    QPixmap m_lastPixmapToProcess;
+    QImage m_lastImageToProcess;
 
-    QFutureWatcher<QPixmap> m_watcher;
+    QFutureWatcher<QImage> m_watcher;
 };
 
 

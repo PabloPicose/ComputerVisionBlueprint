@@ -57,16 +57,16 @@ bool ImageShowModel::eventFilter(QObject* object, QEvent* event) {
     return false;
 }
 
-NodeDataType ImageShowModel::dataType(QtNodes::PortType const, QtNodes::PortIndex const) const {
-    return PixmapData().type();
+QtNodes::NodeDataType ImageShowModel::dataType(QtNodes::PortType const, QtNodes::PortIndex const) const {
+    return ImageData().type();
 }
 
-std::shared_ptr<NodeData> ImageShowModel::outData(QtNodes::PortIndex) {
+std::shared_ptr<QtNodes::NodeData> ImageShowModel::outData(QtNodes::PortIndex) {
     return m_outData.lock();
 }
 
-void ImageShowModel::setInData(const std::shared_ptr<NodeData> nodeData, QtNodes::PortIndex const) {
-    m_outData = std::dynamic_pointer_cast<PixmapData>(nodeData);
+void ImageShowModel::setInData(const std::shared_ptr<QtNodes::NodeData> nodeData, QtNodes::PortIndex const) {
+    m_outData = std::dynamic_pointer_cast<ImageData>(nodeData);
     const auto lockData = m_outData.lock();
 
     if (lockData) {

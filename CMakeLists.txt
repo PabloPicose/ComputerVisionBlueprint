@@ -74,6 +74,7 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Constants/PiModel.cpp
         src/Nodes/Constants/PiModel.h
         src/Nodes/Data/LinesSegmentData.h
+        src/Nodes/Data/ImageData.h
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE

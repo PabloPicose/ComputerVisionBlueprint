@@ -50,27 +50,27 @@ bool ImageLoaderModel::eventFilter(QObject* object, QEvent* event) {
                                                                   QDir::homePath(),
                                                                   tr("Image Files (*.png *.jpg *.bmp)"));
 
-            m_outPixmapData = std::make_shared<PixmapData>(fileName);
-            if (!m_outPixmapData->isNull()) {
-                _label->setPixmap(m_outPixmapData->pixmap().scaled(w, h, Qt::KeepAspectRatio));
+            m_outImageData = std::make_shared<ImageData>(fileName);
+            if (m_outImageData && !m_outImageData->isNull()) {
+                _label->setPixmap(m_outImageData->pixmap().scaled(w, h, Qt::KeepAspectRatio));
             }
 
             Q_EMIT dataUpdated(0);
 
             return true;
         } else if (event->type() == QEvent::Resize) {
-            if (m_outPixmapData && !m_outPixmapData->isNull())
-                _label->setPixmap(m_outPixmapData->pixmap().scaled(w, h, Qt::KeepAspectRatio));
+            if (m_outImageData && !m_outImageData->isNull())
+                _label->setPixmap(m_outImageData->pixmap().scaled(w, h, Qt::KeepAspectRatio));
         }
     }
 
     return false;
 }
 
-NodeDataType ImageLoaderModel::dataType(QtNodes::PortType const, QtNodes::PortIndex const) const {
-    return PixmapData().type();
+QtNodes::NodeDataType ImageLoaderModel::dataType(QtNodes::PortType const, QtNodes::PortIndex const) const {
+    return ImageData().type();
 }
 
-std::shared_ptr<NodeData> ImageLoaderModel::outData(QtNodes::PortIndex) {
-    return m_outPixmapData;
+std::shared_ptr<QtNodes::NodeData> ImageLoaderModel::outData(QtNodes::PortIndex) {
+    return m_outImageData;
 }
