@@ -33,8 +33,8 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Images/ImageShowModel.cpp
         src/Nodes/Images/ImageShowModel.hpp
         # nodes data
-        src/Nodes/Data/PixmapData.hpp
         src/Nodes/Data/DecimalData.hpp
+        src/Nodes/Data/ImageData.h
 
         # nodes include
         src/Nodes/NodesInclude.h
@@ -74,7 +74,6 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Constants/PiModel.cpp
         src/Nodes/Constants/PiModel.h
         src/Nodes/Data/LinesSegmentData.h
-        src/Nodes/Data/ImageData.h
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE

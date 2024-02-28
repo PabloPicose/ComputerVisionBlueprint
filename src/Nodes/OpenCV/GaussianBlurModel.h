@@ -7,12 +7,12 @@
 
 #include <QtNodes/NodeDelegateModel>
 #include <QFutureWatcher>
+#include "Nodes/Data/ImageData.h"
 
 namespace Ui {
     class GaussianBlurForm;
 }
 
-class PixmapData;
 
 class GaussianBlurModel final : public QtNodes::NodeDelegateModel {
     Q_OBJECT
@@ -42,17 +42,17 @@ private slots:
     void requestProcess();
 
 private:
-    static std::tuple<QPixmap, quint64> processImage(QPixmap pixmap, const QSize& size, double sigmaX, double sigmaY);
+    static std::tuple<QImage, quint64> processImage(QImage pixmap, const QSize& size, double sigmaX, double sigmaY);
 
 private:
     std::unique_ptr<Ui::GaussianBlurForm> m_ui;
     QWidget* m_widget = nullptr;
 
-    std::shared_ptr<PixmapData> m_inPixmapData;
+    std::shared_ptr<ImageData> m_inPixmapData;
 
-    QPixmap m_inPixmap;
-    QPixmap m_outPixmap;
-    QFutureWatcher<std::tuple<QPixmap, quint64>> m_watcher;
+    QImage m_inPixmap;
+    QImage m_outPixmap;
+    QFutureWatcher<std::tuple<QImage, quint64>> m_watcher;
 };
 
 

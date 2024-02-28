@@ -16,7 +16,7 @@ public:
 
     explicit ImageData(QImage const &image) : m_image(image) {}
 
-    explicit ImageData(QString const &fileName) : m_image(fileName) {}
+    ImageData(QString const &fileName) : m_image(fileName) {}
 
     QtNodes::NodeDataType type() const override {
         return QtNodes::NodeDataType{"image", "Image"};

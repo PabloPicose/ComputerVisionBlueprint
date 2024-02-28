@@ -53,7 +53,7 @@ QtNodes::NodeDataType HoughLinesP::dataType(QtNodes::PortType portType, QtNodes:
     if (portType == QtNodes::PortType::In) {
         switch (portIndex) {
             case 0:
-                return PixmapData().type();
+                return ImageData().type();
             case 1:
                 return DecimalData().type();
             case 2:
@@ -66,7 +66,7 @@ QtNodes::NodeDataType HoughLinesP::dataType(QtNodes::PortType portType, QtNodes:
                 return DecimalData().type();
             default:
                 qCritical() << "Invalid port index";
-                return PixmapData().type();
+                return ImageData().type();
         }
     }
     return LinesSegmentData().type();
@@ -75,10 +75,10 @@ QtNodes::NodeDataType HoughLinesP::dataType(QtNodes::PortType portType, QtNodes:
 void HoughLinesP::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNodes::PortIndex portIndex) {
     switch (portIndex) {
         case 0: {
-            m_inPixmapData = std::dynamic_pointer_cast<PixmapData>(nodeData);
+            m_inPixmapData = std::dynamic_pointer_cast<ImageData>(nodeData);
             const auto lockData = m_inPixmapData.lock();
             if (lockData) {
-                m_lastPixmapToProcess = lockData->pixmap();
+                m_lastPixmapToProcess = lockData->image();
             } else {
                 m_outLinesData.reset();
                 emit dataUpdated(0);
@@ -214,17 +214,17 @@ void HoughLinesP::requestProcess() {
                                           m_ui->sb_theta->value(),
                                           m_ui->sb_threshold->value(), m_ui->sb_minLineLength->value(),
                                           m_ui->sb_maxLineGap->value());
-    m_lastPixmapToProcess = QPixmap();
+    m_lastPixmapToProcess = QImage();
     m_watcher.setFuture(future);
 }
 
-std::tuple<LinesSegmentData, quint64> HoughLinesP::processImage(const QPixmap pixmap, const double rho,
+std::tuple<LinesSegmentData, quint64> HoughLinesP::processImage(const QImage image, const double rho,
                                                                 const double theta,
                                                                 const int threshold,
                                                                 const double minLineLength, const double maxLineGap) {
     QElapsedTimer timer;
     timer.start();
-    const cv::Mat src = QPixmapToMat(pixmap);
+    const cv::Mat src = QImageToMat(image);
     std::vector<cv::Vec4i> dst;
     try {
         cv::HoughLinesP(src, dst, rho, theta, threshold, minLineLength, maxLineGap);
@@ -235,10 +235,10 @@ std::tuple<LinesSegmentData, quint64> HoughLinesP::processImage(const QPixmap pi
     return std::make_tuple(LinesSegmentData(dst), timer.elapsed());
 }
 
-QPixmap HoughLinesP::getPixmapToProcess() {
+QImage HoughLinesP::getPixmapToProcess() {
     const auto lock = m_inPixmapData.lock();
     if (!lock) {
-        return QPixmap();
+        return QImage();
     }
-    return lock->pixmap();
+    return lock->image();
 }

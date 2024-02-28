@@ -33,15 +33,15 @@ unsigned GaussianBlurModel::nPorts(QtNodes::PortType portType) const {
 }
 
 QtNodes::NodeDataType GaussianBlurModel::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const {
-    return PixmapData().type();
+    return ImageData().type();
 }
 
 void GaussianBlurModel::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNodes::PortIndex portIndex) {
     switch (portIndex) {
         case 0: {
-            m_inPixmapData = std::dynamic_pointer_cast<PixmapData>(nodeData);
+            m_inPixmapData = std::dynamic_pointer_cast<ImageData>(nodeData);
             if (m_inPixmapData) {
-                m_inPixmap = m_inPixmapData->pixmap();
+                m_inPixmap = m_inPixmapData->image();
             }
             break;
         }
@@ -52,7 +52,7 @@ void GaussianBlurModel::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, c
 }
 
 std::shared_ptr<QtNodes::NodeData> GaussianBlurModel::outData(const QtNodes::PortIndex port) {
-    return std::make_shared<PixmapData>(m_outPixmap);
+    return std::make_shared<ImageData>(m_outPixmap);
 }
 
 QWidget* GaussianBlurModel::embeddedWidget() {
@@ -67,7 +67,7 @@ QWidget* GaussianBlurModel::embeddedWidget() {
                 return;
             }
             if (m_inPixmapData) {
-                m_inPixmap = m_inPixmapData->pixmap();
+                m_inPixmap = m_inPixmapData->image();
                 requestProcess();
             }
         });
@@ -77,19 +77,19 @@ QWidget* GaussianBlurModel::embeddedWidget() {
                 return;
             }
             if (m_inPixmapData) {
-                m_inPixmap = m_inPixmapData->pixmap();
+                m_inPixmap = m_inPixmapData->image();
                 requestProcess();
             }
         });
         connect(m_ui->sigmaXSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, [this]() {
             if (m_inPixmapData) {
-                m_inPixmap = m_inPixmapData->pixmap();
+                m_inPixmap = m_inPixmapData->image();
                 requestProcess();
             }
         });
         connect(m_ui->sigmaYSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, [this]() {
             if (m_inPixmapData) {
-                m_inPixmap = m_inPixmapData->pixmap();
+                m_inPixmap = m_inPixmapData->image();
                 requestProcess();
             }
         });
@@ -116,23 +116,23 @@ void GaussianBlurModel::requestProcess() {
     const auto future = QtConcurrent::run(processImage, m_inPixmap, QSize(m_ui->sb_size_w->value(),
                                                                           m_ui->sb_size_h->value()),
                                           m_ui->sigmaXSpinBox->value(), m_ui->sigmaYSpinBox->value());
-    m_inPixmap = QPixmap();
+    m_inPixmap = QImage();
     m_watcher.setFuture(future);
 }
 
-std::tuple<QPixmap, quint64> GaussianBlurModel::processImage(const QPixmap pixmap, const QSize& size,
+std::tuple<QImage, quint64> GaussianBlurModel::processImage(const QImage pixmap, const QSize& size,
                                         const double sigmaX,
                                         const double sigmaY) {
     QElapsedTimer timer;
     timer.start();
-    const cv::Mat src = QPixmapToMat(pixmap);
+    const cv::Mat src = QImageToMat(pixmap);
     cv::Mat dst;
     try {
         cv::GaussianBlur(src, dst, cv::Size(size.width(), size.height()), sigmaX, sigmaY);
     } catch (cv::Exception& e) {
         qDebug() << e.what();
-        return std::make_tuple(QPixmap(), timer.elapsed());
+        return std::make_tuple(QImage(), timer.elapsed());
     }
-    const QPixmap result = MatToQPixmap(dst);
+    const QImage result = MatToQImage(dst);
     return std::make_tuple(result, timer.elapsed());
 }

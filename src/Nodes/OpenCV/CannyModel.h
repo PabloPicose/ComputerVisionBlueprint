@@ -7,8 +7,8 @@
 
 #include <QtNodes/NodeDelegateModel>
 #include <QFutureWatcher>
+#include "Nodes/Data/ImageData.h"
 
-class PixmapData;
 
 namespace Ui {
     class CannyForm;
@@ -36,26 +36,32 @@ public:
 
     QWidget* embeddedWidget() override;
 
+    QImage getImageToProcess() const;
+
 private:
-    static QPixmap processImage(const QPixmap& pixmap, double lowThreshold, double highThreshold,
+    static QImage processImage(const QImage& image, double lowThreshold, double highThreshold,
                                 int apertureSize, bool useL2Gradient);
 
-    void runCanny();
-
 private slots:
-    void requestCompute();
-
     void processFinished();
+
+    void requestProcess();
 
 private:
     QWidget* m_widget = nullptr;
     Ui::CannyForm* m_ui = nullptr;
+    // in
+    std::weak_ptr<ImageData> m_inImageData;
+    double m_lowThreshold = 0.0;
+    double m_highThreshold = 0.0;
+    int m_apertureSize = 3;
+    bool m_useL2Gradient = false;
 
-    std::shared_ptr<PixmapData> m_inPixmapData;
-    QPixmap* m_pixmap = nullptr;
+    // out
+    std::shared_ptr<ImageData> m_outImageData;
+    QImage m_lastImageToProcess;
 
-    QFutureWatcher<QPixmap> m_watcher;
-    bool m_needToCompute = false;
+    QFutureWatcher<QImage> m_watcher;
 };
 
 

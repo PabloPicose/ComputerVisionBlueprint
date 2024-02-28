@@ -6,7 +6,7 @@
 #include <QComboBox>
 
 #include "Nodes/NodesInclude.h"
-#include "Nodes/Data/PixmapData.hpp"
+#include "Nodes/Data/ImageData.h"
 
 ColorCV::ColorCV() {
 }
@@ -43,31 +43,31 @@ unsigned ColorCV::nPorts(QtNodes::PortType portType) const {
 }
 
 QtNodes::NodeDataType ColorCV::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const {
-    return PixmapData().type();
+    return ImageData().type();
 }
 
 void ColorCV::setInData(std::shared_ptr<QtNodes::NodeData> const nodeData, const QtNodes::PortIndex portIndex) {
-    m_inPixmapData = std::dynamic_pointer_cast<PixmapData>(nodeData);
-    const auto lockData = m_inPixmapData.lock();
+    m_inImageData = std::dynamic_pointer_cast<ImageData>(nodeData);
+    const auto lockData = m_inImageData.lock();
     if (lockData) {
-        const auto pixmap = lockData->pixmap();
+        const auto image = lockData->image();
         // Do something with the data
-        if (!pixmap.isNull()) {
+        if (!image.isNull()) {
             // Do something with the data
-            const auto mat = QPixmapToMat(pixmap);
+            const auto mat = QImageToMat(image);
             cv::Mat out;
             cv::cvtColor(mat, out, cv::COLOR_BGR2GRAY);
-            m_outPixmapData = std::make_shared<PixmapData>(MatToQPixmap(out));
+            m_outImageData = std::make_shared<ImageData>(MatToQImage(out));
         }
     }
     else {
-        m_outPixmapData.reset();
+        m_outImageData.reset();
     }
     Q_EMIT dataUpdated(0);
 }
 
 std::shared_ptr<QtNodes::NodeData> ColorCV::outData(const QtNodes::PortIndex port) {
-    return m_outPixmapData;
+    return m_outImageData;
 }
 
 QWidget* ColorCV::embeddedWidget() {

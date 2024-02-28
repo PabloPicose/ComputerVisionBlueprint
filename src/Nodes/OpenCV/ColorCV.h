@@ -9,7 +9,7 @@
 #include <QComboBox>
 #include <opencv2/opencv.hpp>
 
-#include "Nodes/Data/PixmapData.hpp"
+#include "Nodes/Data/ImageData.h"
 
 class ColorCV final : public QtNodes::NodeDelegateModel {
     Q_OBJECT
@@ -33,8 +33,8 @@ public:
     QWidget* embeddedWidget() override;
 
 private:
-    std::weak_ptr<PixmapData> m_inPixmapData;
-    std::shared_ptr<PixmapData> m_outPixmapData;
+    std::weak_ptr<ImageData> m_inImageData;
+    std::shared_ptr<ImageData> m_outImageData;
     QComboBox* m_comboBox = nullptr;
 };
 

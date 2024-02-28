@@ -51,12 +51,12 @@ unsigned BlurModel::nPorts(QtNodes::PortType portType) const {
 QtNodes::NodeDataType BlurModel::dataType(QtNodes::PortType const portType, QtNodes::PortIndex const portIndex) const {
     if (portType == QtNodes::PortType::In) {
         if (portIndex == 0) {
-            return PixmapData().type();
+            return ImageData().type();
         } else {
             return SizeData().type();
         }
     } else {
-        return PixmapData().type();
+        return ImageData().type();
     }
 }
 

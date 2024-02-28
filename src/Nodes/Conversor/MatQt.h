@@ -11,9 +11,9 @@
 
 QImage MatToQImage(const cv::Mat& mat);
 
-QPixmap MatToQPixmap(const cv::Mat& mat);
+//QPixmap MatToQPixmap(const cv::Mat& mat);
 
 cv::Mat QImageToMat(const QImage& image);
 
-cv::Mat QPixmapToMat(const QPixmap& pixmap);
+//cv::Mat QPixmapToMat(const QPixmap& pixmap);
 #endif //MATQT_H

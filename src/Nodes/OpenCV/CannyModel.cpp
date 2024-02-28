@@ -10,13 +10,10 @@
 #include "ui_CannyForm.h"
 
 CannyModel::CannyModel() {
-    m_pixmap = new QPixmap();
     connect(&m_watcher, &QFutureWatcher<QPixmap>::finished, this, &CannyModel::processFinished);
 }
 
 CannyModel::~CannyModel() {
-    delete m_pixmap;
-    m_pixmap = nullptr;
 }
 
 QString CannyModel::caption() const {
@@ -42,7 +39,7 @@ QtNodes::NodeDataType CannyModel::dataType(QtNodes::PortType portType, QtNodes::
     if (portType == QtNodes::PortType::In) {
         switch (portIndex) {
             case 0:
-                return PixmapData().type();
+                return ImageData().type();
             case 1:
                 return DecimalData().type();
             case 2:
@@ -53,43 +50,86 @@ QtNodes::NodeDataType CannyModel::dataType(QtNodes::PortType portType, QtNodes::
                 return BooleanData().type();
             default:
                 qCritical() << "Invalid port index";
-                return PixmapData().type();
+                return ImageData().type();
                 break;
         }
     }
-    return PixmapData().type();
+    return ImageData().type();
 }
 
 void CannyModel::setInData(std::shared_ptr<QtNodes::NodeData> const nodeData, const QtNodes::PortIndex portIndex) {
     switch (portIndex) {
-        case 0:
-            m_inPixmapData = std::dynamic_pointer_cast<PixmapData>(nodeData);
-            if (!m_inPixmapData) {
-                m_inPixmapData = std::make_shared<PixmapData>();
+        case 0: {
+            m_inImageData = std::dynamic_pointer_cast<ImageData>(nodeData);
+            const auto lock = m_inImageData.lock();
+            if (!lock) {
+                m_outImageData.reset();
+                emit dataUpdated(0);
+                return;
+            } else {
+                m_lastImageToProcess = lock->image();
             }
-            break;
-        case 1:
-            m_ui->sb_threshold->setValue(std::dynamic_pointer_cast<DecimalData>(nodeData)->number());
-            break;
-        case 2:
-            m_ui->sb_threshold2->setValue(std::dynamic_pointer_cast<DecimalData>(nodeData)->number());
-            break;
-        case 3:
-            m_ui->sb_apertureSize->setValue(std::dynamic_pointer_cast<NumericalData>(nodeData)->number());
-            break;
-        case 4:
-            m_ui->cb_gradient->setChecked(std::dynamic_pointer_cast<BooleanData>(nodeData)->boolean());
-            break;
+        }
+        break;
+        case 1: {
+            QSignalBlocker blocker(m_ui->sb_threshold);
+            const auto decimalData = std::dynamic_pointer_cast<DecimalData>(nodeData);
+            if (decimalData) {
+                m_ui->sb_threshold->setEnabled(false);
+                m_ui->sb_threshold->setValue(decimalData->number());
+                m_lowThreshold = decimalData->number();
+            } else {
+                m_ui->sb_threshold->setEnabled(true);
+            }
+        }
+        break;
+        case 2: {
+            QSignalBlocker blocker(m_ui->sb_threshold2);
+            const auto decimalData = std::dynamic_pointer_cast<DecimalData>(nodeData);
+            if (decimalData) {
+                m_ui->sb_threshold2->setEnabled(false);
+                m_ui->sb_threshold2->setValue(decimalData->number());
+                m_highThreshold = decimalData->number();
+            } else {
+                m_ui->sb_threshold2->setEnabled(true);
+            }
+        }
+        break;
+        case 3: {
+            QSignalBlocker blocker(m_ui->sb_apertureSize);
+            const auto numericalData = std::dynamic_pointer_cast<NumericalData>(nodeData);
+            if (numericalData) {
+                m_ui->sb_apertureSize->setEnabled(false);
+                m_ui->sb_apertureSize->setValue(numericalData->number());
+                m_apertureSize = numericalData->number();
+            } else {
+                m_ui->sb_apertureSize->setEnabled(true);
+            }
+        }
+        break;
+        case 4: {
+            const auto booleanData = std::dynamic_pointer_cast<BooleanData>(nodeData);
+            if (booleanData) {
+                m_ui->cb_gradient->setEnabled(false);
+                m_useL2Gradient = booleanData->boolean();
+                m_ui->cb_gradient->setChecked(m_useL2Gradient);
+            }
+            else {
+                m_ui->cb_gradient->setEnabled(true);
+            }
+        }
+        break;
+
         default:
             qCritical() << "Invalid port index";
             break;
     }
 
-    requestCompute();
+    requestProcess();
 }
 
 std::shared_ptr<QtNodes::NodeData> CannyModel::outData(const QtNodes::PortIndex port) {
-    return std::make_shared<PixmapData>(*m_pixmap);
+    return m_outImageData;
 }
 
 QWidget* CannyModel::embeddedWidget() {
@@ -98,67 +138,68 @@ QWidget* CannyModel::embeddedWidget() {
         m_ui = new Ui::CannyForm();
         m_ui->setupUi(m_widget);
         // connect the QDoubleSpinBox sb_threshold, sb_threshold2
-        connect(m_ui->sb_threshold, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
-                &CannyModel::requestCompute);
-        connect(m_ui->sb_threshold2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
-                &CannyModel::requestCompute);
-        // connect the QSpinBox sb_apertureSize
-        connect(m_ui->sb_apertureSize, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int value) {
-            // value odd between 3 and 7 convert to 3 or 5 or 7
-                if (value % 2 == 0) {
-                    m_ui->sb_apertureSize->setValue(value + 1);
-                } else {
-                    requestCompute();
-                }
+        connect(m_ui->sb_threshold, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, [this](double value) {
+            m_lowThreshold = value;
+            m_lastImageToProcess = getImageToProcess();
+            requestProcess();
         });
-        // connect the QCheckBox cb_L2gradient
-        connect(m_ui->cb_gradient, &QCheckBox::stateChanged, this, &CannyModel::requestCompute);
+        connect(m_ui->sb_threshold2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, [this](double value) {
+            m_highThreshold = value;
+            m_lastImageToProcess = getImageToProcess();
+            requestProcess();
+        });
+        connect(m_ui->sb_apertureSize, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int value) {
+            m_apertureSize = value;
+            m_lastImageToProcess = getImageToProcess();
+            requestProcess();
+        });
+        connect(m_ui->cb_gradient, &QCheckBox::stateChanged, this, [this](int state) {
+            m_useL2Gradient = state == Qt::Checked;
+            m_lastImageToProcess = getImageToProcess();
+            requestProcess();
+        });
     }
     return m_widget;
 }
 
-void CannyModel::requestCompute() {
-    if (m_needToCompute) {
-        return;
+QImage CannyModel::getImageToProcess() const {
+    const auto imagePtr = m_inImageData.lock();
+    if (!imagePtr) {
+        return QImage();
     }
-    m_needToCompute = true;
-    runCanny();
+    return imagePtr->image();
 }
 
 void CannyModel::processFinished() {
-    *m_pixmap = m_watcher.result();
-    Q_EMIT dataUpdated(0);
-    if (m_needToCompute) {
-        runCanny();
-    }
+    m_outImageData = std::make_shared<ImageData>(m_watcher.result());
+    emit dataUpdated(0);
+    requestProcess();
 }
 
-QPixmap CannyModel::processImage(const QPixmap& pixmap, const double lowThreshold, const double highThreshold,
-                                 const int apertureSize,
-                                 const bool useL2Gradient) {
-    const cv::Mat src = QPixmapToMat(pixmap);
+void CannyModel::requestProcess() {
+    if (m_watcher.isRunning()) {
+        m_watcher.cancel();
+    }
+    if (m_lastImageToProcess.isNull()) {
+        return;
+    }
+
+    const auto future = QtConcurrent::run(processImage, m_lastImageToProcess, m_lowThreshold, m_highThreshold,
+                                          m_apertureSize, m_useL2Gradient);
+    m_lastImageToProcess = QImage();
+    m_watcher.setFuture(future);
+}
+
+QImage CannyModel::processImage(const QImage& image, const double lowThreshold, const double highThreshold,
+                                const int apertureSize,
+                                const bool useL2Gradient) {
+    const cv::Mat src = QImageToMat(image);
     cv::Mat dst;
     try {
         cv::Canny(src, dst, lowThreshold, highThreshold, apertureSize, useL2Gradient);
     } catch (cv::Exception& e) {
         qDebug() << e.what();
-        return QPixmap();
+        return QImage();
     }
-    return MatToQPixmap(dst);
-}
-
-void CannyModel::runCanny() {
-    if (!m_watcher.isRunning()) {
-        m_needToCompute = false;
-        // copy the values from the UI and run the processImage function
-        const auto pixmap = *m_pixmap;
-        const auto lowThreshold = m_ui->sb_threshold->value();
-        const auto highThreshold = m_ui->sb_threshold2->value();
-        const auto kernelSize = m_ui->sb_apertureSize->value();
-        const auto useL2Gradient = m_ui->cb_gradient->isChecked();
-        auto future = QtConcurrent::run([this, pixmap, lowThreshold, highThreshold, kernelSize, useL2Gradient]() {
-            return processImage(pixmap, lowThreshold, highThreshold, kernelSize, useL2Gradient);
-        });
-        m_watcher.setFuture(future);
-    }
+    return MatToQImage(dst);
 }

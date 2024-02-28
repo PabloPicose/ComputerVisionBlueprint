@@ -37,9 +37,6 @@ QImage MatToQImage(const cv::Mat& mat) {
     return QImage();
 }
 
-QPixmap MatToQPixmap(const cv::Mat& mat) {
-    return QPixmap::fromImage(MatToQImage(mat));
-}
 
 cv::Mat QImageToMat(const QImage& image) {
     cv::Mat mat;
@@ -74,8 +71,4 @@ cv::Mat QImageToMat(const QImage& image) {
         }
     }
     return mat;
-}
-
-cv::Mat QPixmapToMat(const QPixmap& pixmap) {
-    return QImageToMat(pixmap.toImage());
 }
