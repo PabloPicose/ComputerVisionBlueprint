@@ -42,16 +42,18 @@ private slots:
     void requestProcess();
 
 private:
-    static std::tuple<QImage, quint64> processImage(QImage pixmap, const QSize& size, double sigmaX, double sigmaY);
+    static std::tuple<QImage, quint64> processImage(QImage image, const QSize& size, double sigmaX, double sigmaY);
+
+    QImage getImageToProcess() const;
 
 private:
     std::unique_ptr<Ui::GaussianBlurForm> m_ui;
     QWidget* m_widget = nullptr;
 
-    std::shared_ptr<ImageData> m_inPixmapData;
+    std::weak_ptr<ImageData> m_inImageData;
+    std::shared_ptr<ImageData> m_outImageData;
 
-    QImage m_inPixmap;
-    QImage m_outPixmap;
+    QImage m_lastImageToProcess;
     QFutureWatcher<std::tuple<QImage, quint64>> m_watcher;
 };
 
