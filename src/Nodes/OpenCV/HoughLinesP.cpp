@@ -196,7 +196,11 @@ QWidget* HoughLinesP::embeddedWidget() {
 
 void HoughLinesP::processFinished() {
     const auto tuple = m_watcher.result();
-    m_outLinesData = std::make_shared<LinesSegmentData>(std::get<0>(tuple));
+    if (m_inPixmapData.expired()) {
+        m_outLinesData.reset();
+    } else {
+        m_outLinesData = std::make_shared<LinesSegmentData>(std::get<0>(tuple));
+    }
     const quint64 time = std::get<1>(tuple);
     m_ui->sb_time->setValue(time);
     emit dataUpdated(0);
