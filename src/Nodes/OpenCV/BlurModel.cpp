@@ -1,0 +1,171 @@
+//
+// Created by pablo on 2/24/24.
+//
+
+#include "BlurModel.h"
+
+#include <QSpinBox>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <Nodes/Data/DataInclude.h>
+#include <opencv2/opencv.hpp>
+#include "Nodes/Conversor/MatQt.h"
+#include <QtConcurrent/QtConcurrent>
+
+#include "ui_BlurForm.h"
+
+
+BlurModel::BlurModel() {
+    connect(&m_watcher, &QFutureWatcher<QPixmap>::finished, this, &BlurModel::processFinished);
+}
+
+BlurModel::~BlurModel() {
+    if (m_widget)
+        m_widget->deleteLater();
+}
+
+QString BlurModel::caption() const {
+    return QString("Blur");
+}
+
+QString BlurModel::name() const {
+    return QString("Blur");
+}
+
+unsigned BlurModel::nPorts(QtNodes::PortType portType) const {
+    unsigned result = 1;
+    switch (portType) {
+        case QtNodes::PortType::In:
+            result = 2;
+            break;
+        case QtNodes::PortType::Out:
+            result = 1;
+            break;
+        default:
+            break;
+    }
+    return result;
+}
+
+QtNodes::NodeDataType BlurModel::dataType(QtNodes::PortType const portType, QtNodes::PortIndex const portIndex) const {
+    if (portType == QtNodes::PortType::In) {
+        if (portIndex == 0) {
+            return PixmapData().type();
+        } else {
+            return SizeData().type();
+        }
+    } else {
+        return PixmapData().type();
+    }
+}
+
+void BlurModel::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNodes::PortIndex portIndex) {
+    switch (portIndex) {
+        case 0: {
+            m_inPixmapData = std::dynamic_pointer_cast<PixmapData>(nodeData);
+            if (!m_inPixmapData.lock()) {
+                m_outPixmapData.reset();
+                emit dataUpdated(0);
+                return;
+            }else {
+                m_lastPixmapToProcess = getPixmapToProcess();
+            }
+        }
+        break;
+        case 1: {
+            const auto sizeDataPtr = std::dynamic_pointer_cast<SizeData>(nodeData);
+            if (!sizeDataPtr) {
+                m_ui->sb_width->setEnabled(true);
+                m_ui->sb_height->setEnabled(true);
+            } else {
+                QSignalBlocker blocker(m_ui->sb_width);
+                QSignalBlocker blocker2(m_ui->sb_height);
+                m_ui->sb_width->setValue(sizeDataPtr->size().width());
+                m_ui->sb_height->setValue(sizeDataPtr->size().height());
+                m_ui->sb_width->setEnabled(false);
+                m_ui->sb_height->setEnabled(false);
+            }
+        }
+        break;
+        default:
+            qCritical() << "Invalid IN port index";
+            break;
+    }
+    requestProcess();
+}
+
+std::shared_ptr<QtNodes::NodeData> BlurModel::outData(const QtNodes::PortIndex port) {
+    return m_outPixmapData;
+}
+
+QWidget* BlurModel::embeddedWidget() {
+    if (!m_widget) {
+        m_widget = new QWidget();
+        m_ui = new Ui::BlurForm();
+        m_ui->setupUi(m_widget);
+
+        // connect sb_width QSpinBox to signal valueChanged
+        connect(m_ui->sb_width, QOverload<int>::of(&QSpinBox::valueChanged), [this](int value) {
+            if (value > 0) {
+                m_ui->lbl_warn_width->setVisible(false);
+            } else {
+                m_ui->lbl_warn_width->setVisible(true);
+            }
+            m_lastPixmapToProcess = getPixmapToProcess();
+            requestProcess();
+        });
+        // connect sb_height QSpinBox to signal valueChanged
+        connect(m_ui->sb_height, QOverload<int>::of(&QSpinBox::valueChanged), [this](int value) {
+            if (value > 0) {
+                m_ui->lbl_warn_height->setVisible(false);
+            } else {
+                m_ui->lbl_warn_height->setVisible(true);
+            }
+            m_lastPixmapToProcess = getPixmapToProcess();
+            requestProcess();
+        });
+        m_widget->setMaximumSize(m_widget->sizeHint());
+    }
+    return m_widget;
+}
+
+QPixmap BlurModel::processImage(const QSize& size, const QPixmap& pixmap) {
+    const int width = size.width();
+    const int height = size.height();
+    QPixmap result;
+    try {
+        const auto mat = QPixmapToMat(pixmap);
+        cv::Mat matResult;
+        cv::blur(mat, matResult, cv::Size(width, height));
+        result = MatToQPixmap(matResult);
+    } catch (const std::exception& e) {
+        qCritical() << e.what();
+    }
+    return result;
+}
+
+QPixmap BlurModel::getPixmapToProcess() {
+    const auto pixmapPtr = m_inPixmapData.lock();
+    if (!pixmapPtr) {
+        return QPixmap();
+    }
+    return pixmapPtr->pixmap();
+}
+
+void BlurModel::processFinished() {
+    m_outPixmapData = std::make_shared<PixmapData>(m_watcher.result());
+    Q_EMIT dataUpdated(0);
+    requestProcess();
+}
+
+void BlurModel::requestProcess() {
+    if (m_watcher.isRunning() || m_lastPixmapToProcess.isNull()) {
+        return;
+    }
+    const auto future = QtConcurrent::run(processImage,
+                                          QSize(m_ui->sb_width->value(), m_ui->sb_height->value()),
+                                          m_lastPixmapToProcess);
+    m_lastPixmapToProcess = QPixmap();
+    m_watcher.setFuture(future);
+}
