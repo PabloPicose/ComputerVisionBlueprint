@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-#include "../Data/DecimalData.hpp"
+#include "Nodes/Data/VariantData.h"
 
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
@@ -45,10 +45,8 @@ public:
 
     QWidget *embeddedWidget() override;
 
-    double number() const;
-
 private:
-    std::shared_ptr<DecimalData> _numberData;
+    std::weak_ptr<VariantData> _numberData;
 
     QLabel *_label;
 };

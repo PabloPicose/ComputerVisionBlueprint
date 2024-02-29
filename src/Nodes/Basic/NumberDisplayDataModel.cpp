@@ -27,7 +27,12 @@ unsigned int NumberDisplayDataModel::nPorts(PortType portType) const
 
 NodeDataType NumberDisplayDataModel::dataType(PortType, PortIndex) const
 {
-    return DecimalData().type();
+    const auto lockData = _numberData.lock();
+    if (lockData) {
+        return lockData->typeIn();
+    } else {
+        return VariantData().typeIn();
+    }
 }
 
 std::shared_ptr<NodeData> NumberDisplayDataModel::outData(PortIndex)
@@ -38,13 +43,14 @@ std::shared_ptr<NodeData> NumberDisplayDataModel::outData(PortIndex)
 
 void NumberDisplayDataModel::setInData(std::shared_ptr<NodeData> data, PortIndex portIndex)
 {
-    _numberData = std::dynamic_pointer_cast<DecimalData>(data);
+    _numberData = std::dynamic_pointer_cast<VariantData>(data);
+    const auto lockData = _numberData.lock();
 
     if (!_label)
         return;
 
-    if (_numberData) {
-        _label->setText(_numberData->numberAsText());
+    if (lockData) {
+        _label->setText(lockData->variant().toString());
     } else {
         _label->clear();
     }
@@ -60,12 +66,4 @@ QWidget *NumberDisplayDataModel::embeddedWidget()
     }
 
     return _label;
-}
-
-double NumberDisplayDataModel::number() const
-{
-    if (_numberData)
-        return _numberData->number();
-
-    return 0.0;
 }

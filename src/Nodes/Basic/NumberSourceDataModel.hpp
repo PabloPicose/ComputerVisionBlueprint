@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtNodes/NodeDelegateModel>
+#include "Nodes/Data/VariantData.h"
 
 #include <QtCore/QObject>
 
@@ -30,8 +31,6 @@ public:
 public:
     QString caption() const override { return QStringLiteral("Number Source"); }
 
-    bool captionVisible() const override { return false; }
-
     QString name() const override { return QStringLiteral("NumberSource"); }
 
 public:
@@ -58,7 +57,7 @@ private Q_SLOTS:
     void onTextEdited(QString const &string);
 
 private:
-    std::shared_ptr<DecimalData> _number;
+    std::shared_ptr<VariantData> _number;
 
     QLineEdit *_lineEdit;
 };

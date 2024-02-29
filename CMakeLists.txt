@@ -83,6 +83,7 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Variables/SizeVarModel.cpp
         src/Nodes/Variables/SizeVarModel.h
         src/Nodes/Variables/SizeVarForm.ui
+        src/Nodes/Data/VariantData.h
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE
