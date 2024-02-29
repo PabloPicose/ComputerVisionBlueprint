@@ -17,8 +17,8 @@ add_subdirectory(3rdparty/nodeeditor)
 add_executable(OpenCVNodeEditor
         src/main.cpp
         # nodes basic
-        src/Nodes/Basic/AdditionModel.hpp
-        src/Nodes/Basic/DivisionModel.hpp
+        src/Nodes/Basic/AdditionModel.h
+        src/Nodes/Basic/DivisionModel.h
         src/Nodes/Basic/MathOperationDataModel.cpp
         src/Nodes/Basic/MathOperationDataModel.hpp
         src/Nodes/Basic/MultiplicationModel.hpp
@@ -26,14 +26,13 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Basic/NumberDisplayDataModel.hpp
         src/Nodes/Basic/NumberSourceDataModel.cpp
         src/Nodes/Basic/NumberSourceDataModel.hpp
-        src/Nodes/Basic/SubtractionModel.hpp
+        src/Nodes/Basic/SubtractionModel.h
         # nodes images
         src/Nodes/Images/ImageLoaderModel.cpp
         src/Nodes/Images/ImageLoaderModel.hpp
         src/Nodes/Images/ImageShowModel.cpp
         src/Nodes/Images/ImageShowModel.hpp
         # nodes data
-        src/Nodes/Data/DecimalData.hpp
         src/Nodes/Data/ImageData.h
 
         # nodes include
@@ -50,40 +49,37 @@ add_executable(OpenCVNodeEditor
         src/Nodes/OpenCV/BlurModel.h
         src/Nodes/OpenCV/BlurForm.ui
 
-        src/Nodes/Data/SizeData.h
-        src/Nodes/Data/DataInclude.h
-        src/Nodes/Conversor/MatQt.cpp
-        src/Nodes/Conversor/MatQt.h
-        src/Nodes/OpenCV/CannyModel.cpp
-        src/Nodes/OpenCV/CannyModel.h
-        src/Nodes/OpenCV/CannyForm.ui
-        src/Nodes/Data/NumericalData.h
-        src/Nodes/Data/BooleanData.h
-        src/Nodes/Data/CascadeClassifierData.h
-        #src/Nodes/OpenCV/RectangleModel.cpp
-        #src/Nodes/OpenCV/RectangleModel.h
-        #src/Nodes/OpenCV/RectangleForm.ui
         #src/Nodes/OpenCV/FacialDetectorModel.cpp
         #src/Nodes/OpenCV/FacialDetectorModel.h
+        #src/Nodes/OpenCV/RectangleForm.ui
+        #src/Nodes/OpenCV/RectangleModel.cpp
+        #src/Nodes/OpenCV/RectangleModel.h
+        src/CustomWidget/CheckBoxReadOnly.cpp
+        src/CustomWidget/CheckBoxReadOnly.h
+        src/Nodes/Constants/PiModel.cpp
+        src/Nodes/Constants/PiModel.h
+        src/Nodes/Conversor/MatQt.cpp
+        src/Nodes/Conversor/MatQt.h
+        src/Nodes/Data/CascadeClassifierData.h
+        src/Nodes/Data/DataInclude.h
+        src/Nodes/Data/ImageFormatData.h
+        src/Nodes/Data/LinesSegmentData.h
+        src/Nodes/Data/VariantData.h
+        src/Nodes/Images/ImageInfoForm.ui
+        src/Nodes/Images/ImageInfoModel.cpp
+        src/Nodes/Images/ImageInfoModel.h
+        src/Nodes/OpenCV/CannyForm.ui
+        src/Nodes/OpenCV/CannyModel.cpp
+        src/Nodes/OpenCV/CannyModel.h
+        src/Nodes/OpenCV/GaussianBlurForm.ui
         src/Nodes/OpenCV/GaussianBlurModel.cpp
         src/Nodes/OpenCV/GaussianBlurModel.h
-        src/Nodes/OpenCV/GaussianBlurForm.ui
         src/Nodes/OpenCV/HoughLinesP.cpp
         src/Nodes/OpenCV/HoughLinesP.h
         src/Nodes/OpenCV/HoughLinesPForm.ui
-        src/Nodes/Constants/PiModel.cpp
-        src/Nodes/Constants/PiModel.h
-        src/Nodes/Data/LinesSegmentData.h
-        src/Nodes/Images/ImageInfoModel.cpp
-        src/Nodes/Images/ImageInfoModel.h
-        src/Nodes/Images/ImageInfoForm.ui
-        src/Nodes/Data/ImageFormatData.h
-        src/CustomWidget/CheckBoxReadOnly.cpp
-        src/CustomWidget/CheckBoxReadOnly.h
+        src/Nodes/Variables/SizeVarForm.ui
         src/Nodes/Variables/SizeVarModel.cpp
         src/Nodes/Variables/SizeVarModel.h
-        src/Nodes/Variables/SizeVarForm.ui
-        src/Nodes/Data/VariantData.h
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE

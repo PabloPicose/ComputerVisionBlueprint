@@ -5,14 +5,14 @@
 #include <QtWidgets/QLineEdit>
 
 NumberSourceDataModel::NumberSourceDataModel()
-    : _number(std::make_shared<VariantData>(0))
+    : m_number(std::make_shared<VariantData>(0))
       , _lineEdit{nullptr} {
 }
 
 QJsonObject NumberSourceDataModel::save() const {
     QJsonObject modelJson = NodeDelegateModel::save();
 
-    modelJson["number"] = QString::number(_number->variant().toDouble());
+    modelJson["number"] = QString::number(m_number->variant().toDouble());
 
     return modelJson;
 }
@@ -26,7 +26,7 @@ void NumberSourceDataModel::load(QJsonObject const& p) {
         bool ok;
         double d = strNum.toDouble(&ok);
         if (ok) {
-            _number = std::make_shared<VariantData>(d);
+            m_number = std::make_shared<VariantData>(d);
 
             if (_lineEdit)
                 _lineEdit->setText(strNum);
@@ -58,18 +58,12 @@ void NumberSourceDataModel::onTextEdited(QString const& str) {
     QVariant number;
     if (str.contains('.') || str.contains('e') || str.contains('E')){
         number = str.toDouble(&ok);
-        const auto is = number.metaType().id() == QMetaType::Double;
-        const auto isInt = number.metaType().id() == QMetaType::Int;
-        qDebug() << "Variant name" << number.typeName() << "is double" << is;
-        qDebug() << "Variant name" << number.typeName() << "is int" << isInt;
     } else {
         number = str.toInt(&ok);
     }
 
     if (ok) {
-        _number = std::make_shared<VariantData>(number);
-        qDebug() << "Variant name" << _number->variant().typeName();
-
+        m_number = std::make_shared<VariantData>(number);
         Q_EMIT dataUpdated(0);
     } else {
         Q_EMIT dataInvalidated(0);
@@ -77,11 +71,11 @@ void NumberSourceDataModel::onTextEdited(QString const& str) {
 }
 
 NodeDataType NumberSourceDataModel::dataType(PortType, PortIndex) const {
-    return _number->type();
+    return m_number->type();
 }
 
 std::shared_ptr<NodeData> NumberSourceDataModel::outData(PortIndex) {
-    return _number;
+    return m_number;
 }
 
 QWidget* NumberSourceDataModel::embeddedWidget() {
@@ -93,17 +87,8 @@ QWidget* NumberSourceDataModel::embeddedWidget() {
 
         connect(_lineEdit, &QLineEdit::textChanged, this, &NumberSourceDataModel::onTextEdited);
 
-        _lineEdit->setText(QString::number(_number->variant().toDouble()));
+        _lineEdit->setText(QString::number(m_number->variant().toDouble()));
     }
 
     return _lineEdit;
-}
-
-void NumberSourceDataModel::setNumber(double n) {
-    _number = std::make_shared<VariantData>(n);
-
-    Q_EMIT dataUpdated(0);
-
-    if (_lineEdit)
-        _lineEdit->setText(QString::number(_number->variant().toDouble()));
 }

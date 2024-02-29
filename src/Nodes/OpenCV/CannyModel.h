@@ -8,6 +8,7 @@
 #include <QtNodes/NodeDelegateModel>
 #include <QFutureWatcher>
 #include "Nodes/Data/ImageData.h"
+#include "Nodes/Data/VariantData.h"
 
 
 namespace Ui {
@@ -51,10 +52,15 @@ private:
     QWidget* m_widget = nullptr;
     Ui::CannyForm* m_ui = nullptr;
     // in
+    // 0
     std::weak_ptr<ImageData> m_inImageData;
+    // 1
     double m_lowThreshold = 0.0;
+    // 2
     double m_highThreshold = 0.0;
+    // 3
     int m_apertureSize = 3;
+    // 4
     bool m_useL2Gradient = false;
 
     // out

@@ -33,28 +33,28 @@ unsigned SizeVarModel::nPorts(QtNodes::PortType portType) const {
 QtNodes::NodeDataType SizeVarModel::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const {
     switch (portType) {
         case QtNodes::PortType::In:
-            return SizeData().type();
+            return VariantData().typeIn();
         case QtNodes::PortType::Out:
             switch (portIndex) {
                 case 0:
-                    return SizeData().type();
+                    return VariantData(QSize()).type();
                 case 1:
-                    return NumericalData().type();
+                    return VariantData(0).type();
                 case 2:
-                    return NumericalData().type();
+                    return VariantData(0).type();
                 default:
                     break;
             }
         default:
-            return SizeData().type();
+            return VariantData().type();
     }
 }
 
 void SizeVarModel::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNodes::PortIndex portIndex) {
-    m_inSizeData = std::dynamic_pointer_cast<SizeData>(nodeData);
+    m_inSizeData = std::dynamic_pointer_cast<VariantData>(nodeData);
     const auto lockSize = m_inSizeData.lock();
-    if (lockSize) {
-        setOutSize(lockSize->size());
+    if (lockSize && lockSize->metaType() == QMetaType::QSize){
+        setOutSize(lockSize->variant().toSize());
         // disable the spinboxes
         m_ui->sb_width->setEnabled(false);
         m_ui->sb_height->setEnabled(false);
@@ -99,9 +99,9 @@ QWidget* SizeVarModel::embeddedWidget() {
 void SizeVarModel::setOutSize(const QSize& size) {
     // updates the size from incoming data
     m_outSize = size;
-    m_outSizeData = std::make_shared<SizeData>(m_outSize);
-    m_outWidthData = std::make_shared<NumericalData>(m_outSize.width());
-    m_outHeightData = std::make_shared<NumericalData>(m_outSize.height());
+    m_outSizeData = std::make_shared<VariantData>(m_outSize);
+    m_outWidthData = std::make_shared<VariantData>(m_outSize.width());
+    m_outHeightData = std::make_shared<VariantData>(m_outSize.height());
     // block signals to avoid infinite loop
     QSignalBlocker blocker(m_ui->sb_width);
     QSignalBlocker blocker2(m_ui->sb_height);

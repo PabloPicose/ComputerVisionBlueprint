@@ -2,23 +2,22 @@
 
 #include "MathOperationDataModel.hpp"
 
-
-/// The model dictates the number of inputs and outputs for the Node.
-/// In this example it has no logic.
-class MultiplicationModel : public MathOperationDataModel
+class AdditionModel : public MathOperationDataModel
 {
 public:
-    virtual ~MultiplicationModel() override {}
+    ~AdditionModel() override = default;
 
 public:
-    QString caption() const override { return QStringLiteral("Multiplication"); }
+    QString caption() const override { return QStringLiteral("Addition"); }
 
-    QString name() const override { return QStringLiteral("Multiplication"); }
+    QString name() const override { return QStringLiteral("Addition"); }
 
 private:
+
     const QMap<QMetaType::Type, QSet<QMetaType::Type>> _allowedTypes = {
         {QMetaType::Int, {QMetaType::Int, QMetaType::Double}},
         {QMetaType::Double, {QMetaType::Int, QMetaType::Double}},
+        {QMetaType::Float, {QMetaType::Int, QMetaType::Double}},
         {QMetaType::QSize, {QMetaType::QSize, QMetaType::Int, QMetaType::Double, QMetaType::Float}},
     };
 
@@ -40,14 +39,13 @@ private:
                 switch (n2->metaType()) {
                     case QMetaType::Int: {
                         const int second = n2->variant().toInt();
-                        return std::make_shared<VariantData>(first * second);
+                        return std::make_shared<VariantData>(first + second);
                     }
                     case QMetaType::Double: {
                         const double second = n2->variant().toDouble();
-                        return std::make_shared<VariantData>(first * second);
+                        return std::make_shared<VariantData>(first + second);
                     }
                     default:
-                        qCritical() << "MultiplicationModel::compute: unknown type of divisor" << n2->metaType();
                         return std::make_shared<VariantData>();
                 }
             }
@@ -57,14 +55,13 @@ private:
                 switch (n2->metaType()) {
                     case QMetaType::Int: {
                         const int second = n2->variant().toInt();
-                        return std::make_shared<VariantData>(first * second);
+                        return std::make_shared<VariantData>(first + second);
                     }
                     case QMetaType::Double: {
                         const double second = n2->variant().toDouble();
-                        return std::make_shared<VariantData>(first * second);
+                        return std::make_shared<VariantData>(first + second);
                     }
                     default:
-                        qCritical() << "MultiplicationModel::compute: unknown type of divisor" << n2->metaType();
                         return std::make_shared<VariantData>();
                 }
             }
@@ -74,14 +71,13 @@ private:
                 switch (n2->metaType()) {
                     case QMetaType::Int: {
                         const int second = n2->variant().toInt();
-                        return std::make_shared<VariantData>(first * second);
+                        return std::make_shared<VariantData>(first + second);
                     }
                     case QMetaType::Double: {
                         const double second = n2->variant().toDouble();
-                        return std::make_shared<VariantData>(first * second);
+                        return std::make_shared<VariantData>(first + second);
                     }
                     default:
-                        qCritical() << "MultiplicationModel::compute: unknown type of divisor" << n2->metaType();
                         return std::make_shared<VariantData>();
                 }
             }
@@ -89,31 +85,30 @@ private:
                 const QSize first = n1->variant().toSize();
                 // switch on the type of the divisor
                 switch (n2->metaType()) {
+                    case QMetaType::QSize: {
+                        const QSize second = n2->variant().toSize();
+                        return std::make_shared<VariantData>(first + second);
+                    }
                     case QMetaType::Int: {
                         const int second = n2->variant().toInt();
-                        return std::make_shared<VariantData>(first * second);
+                        return std::make_shared<VariantData>(QSize(first.width() + second, first.height() + second));
                     }
                     case QMetaType::Double: {
                         const double second = n2->variant().toDouble();
-                        return std::make_shared<VariantData>(first * second);
+                        return std::make_shared<VariantData>(QSize(first.width() + second, first.height() + second));
                     }
                     case QMetaType::Float: {
                         const float second = n2->variant().toFloat();
-                        return std::make_shared<VariantData>(first * second);
-                    }
-                    case QMetaType::QSize: {
-                        const QSize second = n2->variant().toSize();
-                        return std::make_shared<VariantData>(QSize(first.width() * second.width(), first.height() * second.height()));
+                        return std::make_shared<VariantData>(QSize(first.width() + second, first.height() + second));
                     }
                     default:
-                        qCritical() << "MultiplicationModel::compute: unknown type of divisor" << n2->metaType();
+                        qCritical() << "AdditionModel::compute: invalid type";
                         return std::make_shared<VariantData>();
                 }
             }
             default:
-                qCritical() << "MultiplicationModel::compute: unknown type of dividend";
+                qCritical() << "AdditionModel::compute: unknown type of dividend";
                 return std::make_shared<VariantData>();
         }
     }
-
 };

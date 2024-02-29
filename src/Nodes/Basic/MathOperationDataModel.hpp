@@ -1,47 +1,38 @@
 #pragma once
 
 #include <QtNodes/NodeDelegateModel>
-
-#include <QtCore/QJsonObject>
-#include <QtCore/QObject>
 #include <QtWidgets/QLabel>
-
 #include <iostream>
 
-class DecimalData;
+#include "Nodes/Data/VariantData.h"
 
-using QtNodes::NodeData;
-using QtNodes::NodeDataType;
-using QtNodes::NodeDelegateModel;
-using QtNodes::PortIndex;
-using QtNodes::PortType;
 
 /// The model dictates the number of inputs and outputs for the Node.
 /// In this example it has no logic.
-class MathOperationDataModel : public NodeDelegateModel
+class MathOperationDataModel : public QtNodes::NodeDelegateModel
 {
     Q_OBJECT
 
 public:
-    ~MathOperationDataModel() = default;
+    ~MathOperationDataModel() override = default;
 
 public:
-    unsigned int nPorts(PortType portType) const override;
+    unsigned int nPorts(QtNodes::PortType portType) const override;
 
-    NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
+    QtNodes::NodeDataType dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const override;
 
-    std::shared_ptr<NodeData> outData(PortIndex port) override;
+    std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port) override;
 
-    void setInData(std::shared_ptr<NodeData> data, PortIndex portIndex) override;
+    void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex portIndex) override;
 
     QWidget *embeddedWidget() override { return nullptr; }
 
 protected:
-    virtual void compute() = 0;
+    virtual std::shared_ptr<VariantData> compute() const = 0;
 
 protected:
-    std::weak_ptr<DecimalData> _number1;
-    std::weak_ptr<DecimalData> _number2;
-
-    std::shared_ptr<DecimalData> _result;
+    std::weak_ptr<VariantData> _number1;
+    std::weak_ptr<VariantData> _number2;
+private:
+    std::shared_ptr<VariantData> _result;
 };

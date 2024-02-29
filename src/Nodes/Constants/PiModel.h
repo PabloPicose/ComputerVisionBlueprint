@@ -7,8 +7,7 @@
 
 
 #include <QtNodes/NodeDelegateModel>
-
-class DecimalData;
+#include "Nodes/Data/VariantData.h"
 
 class PiModel final : public QtNodes::NodeDelegateModel{
     Q_OBJECT
@@ -30,7 +29,7 @@ public:
     QWidget* embeddedWidget() override;
 
 private:
-    std::shared_ptr<DecimalData> m_pi;
+    std::shared_ptr<VariantData> m_pi;
 };
 
 

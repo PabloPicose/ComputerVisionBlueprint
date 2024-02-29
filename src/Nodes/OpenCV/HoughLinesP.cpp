@@ -55,15 +55,15 @@ QtNodes::NodeDataType HoughLinesP::dataType(QtNodes::PortType portType, QtNodes:
             case 0:
                 return ImageData().type();
             case 1:
-                return DecimalData().type();
+                return VariantData(0.0).type();
             case 2:
-                return DecimalData().type();
+                return VariantData(0.0).type();
             case 3:
-                return NumericalData().type();
+                return VariantData(0).type();
             case 4:
-                return DecimalData().type();
+                return VariantData(0.0).type();
             case 5:
-                return DecimalData().type();
+                return VariantData(0.0).type();
             default:
                 qCritical() << "Invalid port index";
                 return ImageData().type();
@@ -86,9 +86,9 @@ void HoughLinesP::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const Q
             break;
         }
         case 1: {
-            const auto decimalData = std::dynamic_pointer_cast<DecimalData>(nodeData);
-            if (decimalData) {
-                const double decimal = decimalData->number();
+            const auto decimalData = std::dynamic_pointer_cast<VariantData>(nodeData);
+            if (decimalData && decimalData->metaType() == QMetaType::Double) {
+                const double decimal = decimalData->variant().toDouble();
                 QSignalBlocker blocker(m_ui->sb_rho);
                 m_ui->sb_rho->setValue(decimal);
                 m_rho = decimal;
@@ -99,9 +99,9 @@ void HoughLinesP::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const Q
             break;
         }
         case 2: {
-            const auto decimalData = std::dynamic_pointer_cast<DecimalData>(nodeData);
+            const auto decimalData = std::dynamic_pointer_cast<VariantData>(nodeData);
             if (decimalData) {
-                const double decimal = decimalData->number();
+                const double decimal = decimalData->variant().toDouble();
                 QSignalBlocker blocker(m_ui->sb_theta);
                 m_ui->sb_theta->setValue(decimal);
                 m_theta = decimal;
@@ -112,9 +112,9 @@ void HoughLinesP::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const Q
             break;
         }
         case 3: {
-            const auto numericalData = std::dynamic_pointer_cast<NumericalData>(nodeData);
-            if (numericalData) {
-                const int number = numericalData->number();
+            const auto numericalData = std::dynamic_pointer_cast<VariantData>(nodeData);
+            if (numericalData && numericalData->metaType() == QMetaType::Int){
+                const int number = numericalData->variant().toInt();
                 QSignalBlocker blocker(m_ui->sb_threshold);
                 m_ui->sb_threshold->setValue(number);
                 m_threshold = number;
@@ -125,9 +125,9 @@ void HoughLinesP::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const Q
             break;
         }
         case 4: {
-            const auto decimalData = std::dynamic_pointer_cast<DecimalData>(nodeData);
-            if (decimalData) {
-                const double decimal = decimalData->number();
+            const auto decimalData = std::dynamic_pointer_cast<VariantData>(nodeData);
+            if (decimalData && decimalData->metaType() == QMetaType::Double){
+                const double decimal = decimalData->variant().toDouble();
                 QSignalBlocker blocker(m_ui->sb_minLineLength);
                 m_ui->sb_minLineLength->setValue(decimal);
                 m_minLineLength = decimal;
@@ -138,9 +138,9 @@ void HoughLinesP::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const Q
             break;
         }
         case 5: {
-            const auto decimalData = std::dynamic_pointer_cast<DecimalData>(nodeData);
+            const auto decimalData = std::dynamic_pointer_cast<VariantData>(nodeData);
             if (decimalData) {
-                const double decimal = decimalData->number();
+                const double decimal = decimalData->variant().toDouble();
                 QSignalBlocker blocker(m_ui->sb_maxLineGap);
                 m_ui->sb_maxLineGap->setValue(decimal);
                 m_maxLineGap = decimal;

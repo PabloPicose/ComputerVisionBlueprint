@@ -6,8 +6,7 @@
 #define SIZEVARMODEL_H
 
 #include <QtNodes/NodeDelegateModel>
-#include "Nodes/Data/SizeData.h"
-#include "Nodes/Data/NumericalData.h"
+#include "Nodes/Data/VariantData.h"
 
 namespace Ui {
     class SizeVarForm;
@@ -42,15 +41,15 @@ private:
     QWidget* m_widget = nullptr;
 
     // in
-    std::weak_ptr<SizeData> m_inSizeData;
+    std::weak_ptr<VariantData> m_inSizeData;
     // out
     // 0
     QSize m_outSize;
-    std::shared_ptr<SizeData> m_outSizeData;
+    std::shared_ptr<VariantData> m_outSizeData;
     // 1
-    std::shared_ptr<NumericalData> m_outWidthData;
+    std::shared_ptr<VariantData> m_outWidthData;
     // 2
-    std::shared_ptr<NumericalData> m_outHeightData;
+    std::shared_ptr<VariantData> m_outHeightData;
 };
 
 

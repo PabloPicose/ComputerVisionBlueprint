@@ -50,14 +50,13 @@ public:
     QWidget *embeddedWidget() override;
 
 public:
-    void setNumber(double number);
 
 private Q_SLOTS:
 
     void onTextEdited(QString const &string);
 
 private:
-    std::shared_ptr<VariantData> _number;
+    std::shared_ptr<VariantData> m_number;
 
     QLineEdit *_lineEdit;
 };

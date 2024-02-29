@@ -11,6 +11,7 @@
 #include <opencv2/opencv.hpp>
 #include "Nodes/Data/LinesSegmentData.h"
 #include "Nodes/Data/ImageData.h"
+#include "Nodes/Data/VariantData.h"
 
 namespace Ui {
     class HoughLinesPForm;
@@ -55,12 +56,12 @@ private:
     std::unique_ptr<Ui::HoughLinesPForm> m_ui;
     QWidget* m_widget = nullptr;
 
-    std::weak_ptr<ImageData> m_inPixmapData;
 
     QImage m_lastPixmapToProcess;
     QFutureWatcher<std::tuple<LinesSegmentData, quint64>> m_watcher;
     std::shared_ptr<LinesSegmentData> m_outLinesData;
 
+    std::weak_ptr<ImageData> m_inPixmapData;
     double m_rho = 1;
     double m_theta = CV_PI / 180;
     int m_threshold = 50;

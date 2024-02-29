@@ -40,13 +40,13 @@ QtNodes::NodeDataType ImageInfoModel::dataType(QtNodes::PortType portType, QtNod
                 case 0:
                     return ImageData().type();
                 case 1:
-                    return BooleanData().type();
+                    return VariantData(false).type();
                 case 2:
                     return ImageFormatData().type();
                 case 3:
-                    return BooleanData().type();
+                    return VariantData(false).type();
                 case 4:
-                    return BooleanData().type();
+                    return VariantData(false).type();
                 default:
                     break;
             }
@@ -110,14 +110,14 @@ void ImageInfoModel::updateData() {
         invalidateOutData();
     } else {
         m_outImageData = std::make_shared<ImageData>(imageLock->image());
-        m_outIsNull = std::make_shared<BooleanData>(imageLock->image().isNull());
+        m_outIsNull = std::make_shared<VariantData>(imageLock->image().isNull());
         m_outFormat = std::make_shared<ImageFormatData>(imageLock->image().format());
-        m_outIsGrayscale = std::make_shared<BooleanData>(imageLock->image().isGrayscale());
-        m_outHasAlpha = std::make_shared<BooleanData>(imageLock->image().hasAlphaChannel());
+        m_outIsGrayscale = std::make_shared<VariantData>(imageLock->image().isGrayscale());
+        m_outHasAlpha = std::make_shared<VariantData>(imageLock->image().hasAlphaChannel());
         if (m_ui) {
-            m_ui->cb_isNull->setChecked(m_outIsNull->boolean());
-            m_ui->cb_isGrayScale->setChecked(m_outIsGrayscale->boolean());
-            m_ui->cb_hasAlpha->setChecked(m_outHasAlpha->boolean());
+            m_ui->cb_isNull->setChecked(m_outIsNull->variant().toBool());
+            m_ui->cb_isGrayScale->setChecked(m_outIsGrayscale->variant().toBool());
+            m_ui->cb_hasAlpha->setChecked(m_outHasAlpha->variant().toBool());
             m_ui->le_format->setText(formatToString(m_outFormat->format()));
         }
     }

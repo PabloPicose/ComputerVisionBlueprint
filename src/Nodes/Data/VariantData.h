@@ -21,7 +21,7 @@ public:
         if (typeName.startsWith('Q') || typeName.startsWith('q')) {
             typeName = typeName.mid(1);
         }
-        // the string should have at least 6 characters, if not, fill with spaces
+        // the string should have at least 10 characters, if not, fill with spaces
         typeName = typeName.rightJustified(10, ' ');
         return QtNodes::NodeDataType{
             "variant",
@@ -31,8 +31,9 @@ public:
 
     QtNodes::NodeDataType typeIn() const {
         QString typeName = m_variant.typeName();
-        // the string should have at least 6 characters, if not, fill with spaces
-        //typeName = typeName.rightJustified(10, ' ');
+        if (typeName.startsWith('Q') || typeName.startsWith('q')) {
+            typeName = typeName.mid(1);
+        }
         typeName = typeName.leftJustified(10, ' ');
         return QtNodes::NodeDataType{
             "variant",
@@ -54,6 +55,27 @@ public:
 
     bool isValid() const {
         return m_variant.isValid();
+    }
+
+    QString toString() const {
+        QString output;
+        switch (metaType()) {
+            case QMetaType::QSize: {
+                const QSize size = m_variant.toSize();
+                output = QString("%1x%2").arg(size.width()).arg(size.height());
+                break;
+            }
+            case QMetaType::Bool: {
+                output = m_variant.toBool() ? "true" : "false";
+                break;
+            }
+            default : {
+                output = m_variant.toString();
+                break;
+            }
+        }
+
+        return output;
     }
 
 private:

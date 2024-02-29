@@ -4,10 +4,9 @@
 
 #include "PiModel.h"
 #include <opencv2/opencv.hpp>
-#include "Nodes/Data/DecimalData.hpp"
 
 PiModel::PiModel() {
-    m_pi = std::make_shared<DecimalData>(CV_PI);
+    m_pi = std::make_shared<VariantData>(CV_PI);
 }
 
 QString PiModel::caption() const {
@@ -28,7 +27,7 @@ unsigned PiModel::nPorts(QtNodes::PortType portType) const {
 
 QtNodes::NodeDataType PiModel::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const {
     if (portType == QtNodes::PortType::Out) {
-        return DecimalData().type();
+        return VariantData(0.0).type();
     } else {
         return {};
     }

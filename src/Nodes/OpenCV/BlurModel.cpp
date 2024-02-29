@@ -53,7 +53,7 @@ QtNodes::NodeDataType BlurModel::dataType(QtNodes::PortType const portType, QtNo
         if (portIndex == 0) {
             return ImageData().type();
         } else {
-            return SizeData().type();
+            return VariantData().typeIn();
         }
     } else {
         return ImageData().type();
@@ -74,15 +74,16 @@ void BlurModel::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtN
         }
         break;
         case 1: {
-            const auto sizeDataPtr = std::dynamic_pointer_cast<SizeData>(nodeData);
+            const auto sizeDataPtr = std::dynamic_pointer_cast<VariantData>(nodeData);
             if (!sizeDataPtr) {
                 m_ui->sb_width->setEnabled(true);
                 m_ui->sb_height->setEnabled(true);
             } else {
                 QSignalBlocker blocker(m_ui->sb_width);
                 QSignalBlocker blocker2(m_ui->sb_height);
-                m_ui->sb_width->setValue(sizeDataPtr->size().width());
-                m_ui->sb_height->setValue(sizeDataPtr->size().height());
+                const QSize size = sizeDataPtr->variant().toSize();
+                m_ui->sb_width->setValue(size.width());
+                m_ui->sb_height->setValue(size.height());
                 m_ui->sb_width->setEnabled(false);
                 m_ui->sb_height->setEnabled(false);
             }

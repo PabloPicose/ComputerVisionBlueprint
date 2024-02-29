@@ -1,12 +1,11 @@
 #include "MathOperationDataModel.hpp"
 
-#include "../Data/DecimalData.hpp"
 
-unsigned int MathOperationDataModel::nPorts(PortType portType) const
+unsigned int MathOperationDataModel::nPorts(QtNodes::PortType portType) const
 {
     unsigned int result;
 
-    if (portType == PortType::In)
+    if (portType == QtNodes::PortType::In)
         result = 2;
     else
         result = 1;
@@ -14,19 +13,43 @@ unsigned int MathOperationDataModel::nPorts(PortType portType) const
     return result;
 }
 
-NodeDataType MathOperationDataModel::dataType(PortType, PortIndex) const
+QtNodes::NodeDataType MathOperationDataModel::dataType(QtNodes::PortType portType, QtNodes::PortIndex) const
 {
-    return DecimalData().type();
+    switch (portType) {
+        case QtNodes::PortType::In: {
+            const auto lock1 = _number1.lock();
+            if (lock1) {
+                return lock1->typeIn();
+            } else {
+                return VariantData().type();
+            }
+            const auto lock2 = _number2.lock();
+            if (lock2) {
+                return lock2->typeIn();
+            } else {
+                return VariantData().type();
+            }
+        }
+        case QtNodes::PortType::Out: {
+            if (_result) {
+                return _result->type();
+            } else {
+                return VariantData().type();
+            }
+        }
+        default:
+            return VariantData().type();
+    }
 }
 
-std::shared_ptr<NodeData> MathOperationDataModel::outData(PortIndex)
+std::shared_ptr<QtNodes::NodeData> MathOperationDataModel::outData(QtNodes::PortIndex)
 {
-    return std::static_pointer_cast<NodeData>(_result);
+    return _result;
 }
 
-void MathOperationDataModel::setInData(std::shared_ptr<NodeData> data, PortIndex portIndex)
+void MathOperationDataModel::setInData(std::shared_ptr<QtNodes::NodeData> const data, QtNodes::PortIndex portIndex)
 {
-    auto numberData = std::dynamic_pointer_cast<DecimalData>(data);
+    const auto numberData = std::dynamic_pointer_cast<VariantData>(data);
 
     if (!data) {
         Q_EMIT dataInvalidated(0);
@@ -38,5 +61,6 @@ void MathOperationDataModel::setInData(std::shared_ptr<NodeData> data, PortIndex
         _number2 = numberData;
     }
 
-    compute();
+    _result = compute();
+    emit dataUpdated(0);
 }

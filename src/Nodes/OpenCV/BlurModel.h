@@ -10,9 +10,8 @@
 #include <QReadWriteLock>
 #include <QFutureWatcher>
 #include "Nodes/Data/ImageData.h"
+#include "Nodes/Data/VariantData.h"
 
-
-class SizeData;
 
 namespace Ui {
     class BlurForm;

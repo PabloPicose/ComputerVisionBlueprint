@@ -7,7 +7,7 @@
 
 #include <QtNodes/NodeDelegateModel>
 #include "Nodes/Data/ImageData.h"
-#include "Nodes/Data/BooleanData.h"
+#include "Nodes/Data/VariantData.h"
 #include "Nodes/Data/ImageFormatData.h"
 
 namespace Ui {
@@ -52,13 +52,13 @@ private:
     // 0
     std::shared_ptr<ImageData> m_outImageData;
     // 1
-    std::shared_ptr<BooleanData> m_outIsNull;
+    std::shared_ptr<VariantData> m_outIsNull;
     // 2
     std::shared_ptr<ImageFormatData> m_outFormat;
     // 3
-    std::shared_ptr<BooleanData> m_outIsGrayscale;
+    std::shared_ptr<VariantData> m_outIsGrayscale;
     // 4
-    std::shared_ptr<BooleanData> m_outHasAlpha;
+    std::shared_ptr<VariantData> m_outHasAlpha;
 };
 
 

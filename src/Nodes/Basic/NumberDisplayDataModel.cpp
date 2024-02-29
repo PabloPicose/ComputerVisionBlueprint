@@ -50,7 +50,7 @@ void NumberDisplayDataModel::setInData(std::shared_ptr<NodeData> data, PortIndex
         return;
 
     if (lockData) {
-        _label->setText(lockData->variant().toString());
+        _label->setText(lockData->toString());
     } else {
         _label->clear();
     }

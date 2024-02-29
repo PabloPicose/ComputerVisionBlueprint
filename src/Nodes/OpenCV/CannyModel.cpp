@@ -41,13 +41,13 @@ QtNodes::NodeDataType CannyModel::dataType(QtNodes::PortType portType, QtNodes::
             case 0:
                 return ImageData().type();
             case 1:
-                return DecimalData().type();
+                return VariantData(0.0).typeIn();
             case 2:
-                return DecimalData().type();
+                return VariantData(0.0).typeIn();
             case 3:
-                return NumericalData().type();
+                return VariantData(0).typeIn();
             case 4:
-                return BooleanData().type();
+                return VariantData(false).typeIn();
             default:
                 qCritical() << "Invalid port index";
                 return ImageData().type();
@@ -73,11 +73,11 @@ void CannyModel::setInData(std::shared_ptr<QtNodes::NodeData> const nodeData, co
         break;
         case 1: {
             QSignalBlocker blocker(m_ui->sb_threshold);
-            const auto decimalData = std::dynamic_pointer_cast<DecimalData>(nodeData);
-            if (decimalData) {
+            const auto decimalData = std::dynamic_pointer_cast<VariantData>(nodeData);
+            if (decimalData && decimalData->metaType() == QMetaType::Double) {
                 m_ui->sb_threshold->setEnabled(false);
-                m_ui->sb_threshold->setValue(decimalData->number());
-                m_lowThreshold = decimalData->number();
+                m_ui->sb_threshold->setValue(decimalData->variant().toDouble());
+                m_lowThreshold = decimalData->variant().toDouble();
             } else {
                 m_ui->sb_threshold->setEnabled(true);
             }
@@ -85,11 +85,11 @@ void CannyModel::setInData(std::shared_ptr<QtNodes::NodeData> const nodeData, co
         break;
         case 2: {
             QSignalBlocker blocker(m_ui->sb_threshold2);
-            const auto decimalData = std::dynamic_pointer_cast<DecimalData>(nodeData);
-            if (decimalData) {
+            const auto decimalData = std::dynamic_pointer_cast<VariantData>(nodeData);
+            if (decimalData && decimalData->metaType() == QMetaType::Double){
                 m_ui->sb_threshold2->setEnabled(false);
-                m_ui->sb_threshold2->setValue(decimalData->number());
-                m_highThreshold = decimalData->number();
+                m_ui->sb_threshold2->setValue(decimalData->variant().toDouble());
+                m_highThreshold = decimalData->variant().toDouble();
             } else {
                 m_ui->sb_threshold2->setEnabled(true);
             }
@@ -97,21 +97,21 @@ void CannyModel::setInData(std::shared_ptr<QtNodes::NodeData> const nodeData, co
         break;
         case 3: {
             QSignalBlocker blocker(m_ui->sb_apertureSize);
-            const auto numericalData = std::dynamic_pointer_cast<NumericalData>(nodeData);
-            if (numericalData) {
+            const auto numericalData = std::dynamic_pointer_cast<VariantData>(nodeData);
+            if (numericalData && numericalData->metaType() == QMetaType::Int){
                 m_ui->sb_apertureSize->setEnabled(false);
-                m_ui->sb_apertureSize->setValue(numericalData->number());
-                m_apertureSize = numericalData->number();
+                m_ui->sb_apertureSize->setValue(numericalData->variant().toDouble());
+                m_apertureSize = numericalData->variant().toInt();
             } else {
                 m_ui->sb_apertureSize->setEnabled(true);
             }
         }
         break;
         case 4: {
-            const auto booleanData = std::dynamic_pointer_cast<BooleanData>(nodeData);
-            if (booleanData) {
+            const auto booleanData = std::dynamic_pointer_cast<VariantData>(nodeData);
+            if (booleanData && booleanData->metaType() == QMetaType::Bool){
                 m_ui->cb_gradient->setEnabled(false);
-                m_useL2Gradient = booleanData->boolean();
+                m_useL2Gradient = booleanData->variant().toBool();
                 m_ui->cb_gradient->setChecked(m_useL2Gradient);
             }
             else {
