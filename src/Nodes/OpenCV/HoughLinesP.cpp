@@ -195,6 +195,7 @@ QWidget* HoughLinesP::embeddedWidget() {
 }
 
 void HoughLinesP::processFinished() {
+    m_ui->cb_running->setChecked(false);
     const auto tuple = m_watcher.result();
     if (m_inPixmapData.expired()) {
         m_outLinesData.reset();
@@ -214,6 +215,7 @@ void HoughLinesP::requestProcess() {
     if (m_lastPixmapToProcess.isNull()) {
         return;
     }
+    m_ui->cb_running->setChecked(true);
     const auto future = QtConcurrent::run(processImage, m_lastPixmapToProcess, m_ui->sb_rho->value(),
                                           m_ui->sb_theta->value(),
                                           m_ui->sb_threshold->value(), m_ui->sb_minLineLength->value(),

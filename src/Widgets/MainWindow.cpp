@@ -49,7 +49,9 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> MainWindow::registerDataMode
 
     ret->registerModel<ImageShowModel>("Images");
 
-    ret->registerModel<ColorCV>("OpenCV");
+    ret->registerModel<ImageInfoModel>("Images");
+
+    ret->registerModel<ColorCVModel>("OpenCV");
 
     ret->registerModel<BlurModel>("OpenCV");
 

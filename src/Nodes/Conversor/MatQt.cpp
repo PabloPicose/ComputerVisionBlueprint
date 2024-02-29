@@ -3,6 +3,7 @@
 //
 
 #include "MatQt.h"
+#include <QDebug>
 QImage MatToQImage(const cv::Mat& mat) {
     switch (mat.type()) {
         // 8-bit, 4 channel
@@ -65,7 +66,15 @@ cv::Mat QImageToMat(const QImage& image) {
             break;
         }
         // Add other QImage formats if needed.
+        // QImage::Format_Indexed8
+        case QImage::Format_Indexed8: {
+            mat = cv::Mat(image.height(), image.width(), CV_8UC1,
+                          const_cast<uchar *>(image.bits()), image.bytesPerLine());
+            break;
+        }
+
         default: {
+            qCritical() << "QImage format not handled in switch:" << image.format();
             // Unsupported format
             break;
         }

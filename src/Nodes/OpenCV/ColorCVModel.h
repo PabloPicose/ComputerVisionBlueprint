@@ -11,12 +11,12 @@
 
 #include "Nodes/Data/ImageData.h"
 
-class ColorCV final : public QtNodes::NodeDelegateModel {
+class ColorCVModel final : public QtNodes::NodeDelegateModel {
     Q_OBJECT
 public:
-    ColorCV();
+    ColorCVModel();
 
-    ~ColorCV() override;
+    ~ColorCVModel() override;
 
     QString caption() const override;
 
@@ -31,6 +31,9 @@ public:
     std::shared_ptr<QtNodes::NodeData> outData(const QtNodes::PortIndex port) override;
 
     QWidget* embeddedWidget() override;
+
+private:
+    static QImage processImage(QImage image, int code);
 
 private:
     std::weak_ptr<ImageData> m_inImageData;

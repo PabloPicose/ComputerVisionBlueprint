@@ -20,9 +20,10 @@
 
 #include "Nodes/Images/ImageLoaderModel.hpp"
 #include "Nodes/Images/ImageShowModel.hpp"
+#include "Nodes/Images/ImageInfoModel.h"
 
 // opencv
-#include "Nodes/OpenCV/ColorCV.h"
+#include "Nodes/OpenCV/ColorCVModel.h"
 #include "Nodes/OpenCV/BlurModel.h"
 #include "Nodes/OpenCV/CannyModel.h"
 #include "Nodes/OpenCV/GaussianBlurModel.h"

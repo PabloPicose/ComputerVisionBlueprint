@@ -44,8 +44,8 @@ add_executable(OpenCVNodeEditor
         src/Widgets/MainWindow.h
         src/Widgets/MainWindow.ui
         src/Nodes/NodesInclude.cpp
-        src/Nodes/OpenCV/ColorCV.cpp
-        src/Nodes/OpenCV/ColorCV.h
+        src/Nodes/OpenCV/ColorCVModel.cpp
+        src/Nodes/OpenCV/ColorCVModel.h
         src/Nodes/OpenCV/BlurModel.cpp
         src/Nodes/OpenCV/BlurModel.h
         src/Nodes/OpenCV/BlurForm.ui
@@ -74,6 +74,12 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Constants/PiModel.cpp
         src/Nodes/Constants/PiModel.h
         src/Nodes/Data/LinesSegmentData.h
+        src/Nodes/Images/ImageInfoModel.cpp
+        src/Nodes/Images/ImageInfoModel.h
+        src/Nodes/Images/ImageInfoForm.ui
+        src/Nodes/Data/ImageFormatData.h
+        src/CustomWidget/CheckBoxReadOnly.cpp
+        src/CustomWidget/CheckBoxReadOnly.h
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE
