@@ -80,6 +80,9 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Data/ImageFormatData.h
         src/CustomWidget/CheckBoxReadOnly.cpp
         src/CustomWidget/CheckBoxReadOnly.h
+        src/Nodes/Variables/SizeVarModel.cpp
+        src/Nodes/Variables/SizeVarModel.h
+        src/Nodes/Variables/SizeVarForm.ui
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE

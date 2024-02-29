@@ -22,6 +22,9 @@
 #include "Nodes/Images/ImageShowModel.hpp"
 #include "Nodes/Images/ImageInfoModel.h"
 
+// Variables
+#include "Nodes/Variables/SizeVarModel.h"
+
 // opencv
 #include "Nodes/OpenCV/ColorCVModel.h"
 #include "Nodes/OpenCV/BlurModel.h"
