@@ -38,30 +38,25 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> MainWindow::registerDataMode
     ret->registerModel<NumberDisplayDataModel>("Displays");
 
     ret->registerModel<AdditionModel>("Operators");
-
     ret->registerModel<SubtractionModel>("Operators");
-
     ret->registerModel<MultiplicationModel>("Operators");
-
     ret->registerModel<DivisionModel>("Operators");
 
     ret->registerModel<ImageLoaderModel>("Images");
-
     ret->registerModel<ImageShowModel>("Images");
-
     ret->registerModel<ImageInfoModel>("Images");
-
     ret->registerModel<DrawLinesModel>("Images");
+    ret->registerModel<DrawRectsModel>("Images");
 
     ret->registerModel<ColorCVModel>("OpenCV");
-
     ret->registerModel<BlurModel>("OpenCV");
-
     ret->registerModel<CannyModel>("OpenCV");
-
     ret->registerModel<GaussianBlurModel>("OpenCV");
-
     ret->registerModel<HoughLinesP>("OpenCV");
+    ret->registerModel<EqualizeHist>("OpenCV");
+
+    ret->registerModel<CascadeClassifier>("CascadeClassifier");
+    ret->registerModel<DetectMultiScaleModel>("CascadeClassifier");
 
     ret->registerModel<SizeVarModel>("Variables");
     ret->registerModel<FileVarModel>("Variables");

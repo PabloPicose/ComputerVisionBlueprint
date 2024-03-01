@@ -2,25 +2,25 @@
 // Created by pablo on 3/1/24.
 //
 
-#ifndef FILEVARMODEL_H
-#define FILEVARMODEL_H
+#ifndef CASCADECLASSIFIER_H
+#define CASCADECLASSIFIER_H
+
 
 #include <QtNodes/NodeDelegateModel>
 #include "Nodes/Data/FileData.h"
 #include "Nodes/Data/CascadeClassifierData.h"
 
 namespace Ui {
-    class FileVarForm;
+    class CascadeClassifierForm;
 }
 
-
-class FileVarModel final : public QtNodes::NodeDelegateModel {
+class CascadeClassifier final : public QtNodes::NodeDelegateModel {
     Q_OBJECT
 
 public:
-    FileVarModel();
+    CascadeClassifier();
 
-    ~FileVarModel() override;
+    ~CascadeClassifier() override;
 
     QString caption() const override;
 
@@ -36,18 +36,14 @@ public:
 
     QWidget* embeddedWidget() override;
 
-private slots:
-    void onBrowseButtonClicked();
-
-    void onTextChanged(const QString& text);
-
 private:
-    std::unique_ptr<Ui::FileVarForm> m_ui;
+    std::unique_ptr<Ui::CascadeClassifierForm> m_ui;
     QWidget* m_widget = nullptr;
 
-    // out
-    std::shared_ptr<FileData> m_outFileData;
+    std::weak_ptr<FileData> m_inFileData;
+
+    std::shared_ptr<CascadeClassifierData> m_outFileData;
 };
 
 
-#endif //FILEVARMODEL_H
+#endif //CASCADECLASSIFIER_H

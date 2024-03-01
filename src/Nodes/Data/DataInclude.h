@@ -9,5 +9,6 @@
 #include "Nodes/Data/ImageData.h"
 #include "Nodes/Data/ImageFormatData.h"
 #include "Nodes/Data/FileData.h"
+#include "Nodes/Data/RectsData.h"
 
 #endif //DATAINCLUDE_H

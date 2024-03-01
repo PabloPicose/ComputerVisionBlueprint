@@ -68,8 +68,6 @@ void DrawLinesModel::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, cons
                 m_outImageData.reset();
                 emit dataUpdated(0);
                 return;
-            } else {
-                m_lastPixmapToProcess = m_inImageData.lock()->image();
             }
             break;
         case 1:
@@ -104,18 +102,22 @@ QWidget* DrawLinesModel::embeddedWidget() {
         // sb_r sb_g sb_b, sb_thickness
         connect(m_ui->sb_r, QOverload<int>::of(&QSpinBox::valueChanged), [this](int value) {
             m_lastColor.setRed(value);
+            m_lastPixmapToProcess = getPixmapToProcess();
             requestProcess();
         });
         connect(m_ui->sb_g, QOverload<int>::of(&QSpinBox::valueChanged), [this](int value) {
             m_lastColor.setGreen(value);
+            m_lastPixmapToProcess = getPixmapToProcess();
             requestProcess();
         });
         connect(m_ui->sb_b, QOverload<int>::of(&QSpinBox::valueChanged), [this](int value) {
             m_lastColor.setBlue(value);
+            m_lastPixmapToProcess = getPixmapToProcess();
             requestProcess();
         });
         connect(m_ui->sb_thickness, QOverload<int>::of(&QSpinBox::valueChanged), [this](int value) {
             m_lastThickness = value;
+            m_lastPixmapToProcess = getPixmapToProcess();
             requestProcess();
         });
     }
@@ -150,6 +152,14 @@ void DrawLinesModel::requestProcess() {
     m_watcher.setFuture(future);
 }
 
+QImage DrawLinesModel::getPixmapToProcess() const {
+    const auto lock = m_inImageData.lock();
+    if (lock) {
+        return lock->image();
+    }
+    return QImage();
+}
+
 QPair<QImage, quint64> DrawLinesModel::processImage(QImage image, const LinesSegment& linesSegment, const QColor& color,
                                                     const int thickness) {
     QElapsedTimer timer;
@@ -166,6 +176,10 @@ QPair<QImage, quint64> DrawLinesModel::processImage(QImage image, const LinesSeg
 }
 
 void DrawLinesModel::updateFromInputPort() {
+    const auto lockImage = m_inImageData.lock();
+    if (lockImage) {
+        m_lastPixmapToProcess = lockImage->image();
+    }
     const auto lockColor = m_inColor.lock();
     if (lockColor) {
         QSignalBlocker sbr(m_ui->sb_r);

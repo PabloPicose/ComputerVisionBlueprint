@@ -21,6 +21,7 @@
 #include "Nodes/Images/ImageShowModel.hpp"
 #include "Nodes/Images/ImageInfoModel.h"
 #include "Nodes/Images/DrawLinesModel.h"
+#include "Nodes/Images/DrawRectsModel.h"
 // Variables
 #include "Nodes/Variables/SizeVarModel.h"
 #include "Nodes/Variables/FileVarModel.h"
@@ -31,6 +32,9 @@
 #include "Nodes/OpenCV/CannyModel.h"
 #include "Nodes/OpenCV/GaussianBlurModel.h"
 #include "Nodes/OpenCV/HoughLinesP.h"
+#include "Nodes/OpenCV/CascadeClassifierModel.h"
+#include "Nodes/OpenCV/EqualizeHist.h"
+#include "Nodes/OpenCV/DetectMultiScaleModel.h"
 
 // data
 #include "Nodes/Data/DataInclude.h"

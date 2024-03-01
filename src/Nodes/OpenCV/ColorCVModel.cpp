@@ -5,8 +5,8 @@
 #include "ColorCVModel.h"
 #include <QComboBox>
 
-#include "Nodes/NodesInclude.h"
 #include "Nodes/Data/ImageData.h"
+#include "Nodes/Conversor/MatQt.h"
 
 ColorCVModel::ColorCVModel() {
 }

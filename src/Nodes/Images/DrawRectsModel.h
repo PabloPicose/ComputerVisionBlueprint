@@ -1,28 +1,28 @@
 //
-// Created by pablo on 2/29/24.
+// Created by pablo on 3/1/24.
 //
 
-#ifndef DRAWLINESMODEL_H
-#define DRAWLINESMODEL_H
+#ifndef DRAWRECTSMODEL_H
+#define DRAWRECTSMODEL_H
 
 #include <QtNodes/NodeDelegateModel>
 #include <QFutureWatcher>
 
-#include "Nodes/Data/LinesSegmentData.h"
+#include "Nodes/Data/RectsData.h"
 #include "Nodes/Data/ImageData.h"
 #include "Nodes/Data/VariantData.h"
 
 namespace Ui {
-    class DrawLinesForm;
+    class DrawRectsForm;
 }
 
-class DrawLinesModel final : public QtNodes::NodeDelegateModel {
+class DrawRectsModel final : public QtNodes::NodeDelegateModel {
     Q_OBJECT
 
 public:
-    DrawLinesModel();
+    DrawRectsModel();
 
-    ~DrawLinesModel() override;
+    ~DrawRectsModel() override;
 
     QString caption() const override;
 
@@ -38,23 +38,20 @@ public:
 
     QWidget* embeddedWidget() override;
 
+private:
+    static QPair<QImage, quint64> processImage(QImage image, const Rects& rects, const QColor& color, int thickness);
+
+    void updateFromInputPort();
+
+    QImage getPixmapToProcess() const;
+
 private slots:
     void processFinished();
 
     void requestProcess();
-
-    QImage getPixmapToProcess() const;
-
-private:
-    static QPair<QImage, quint64> processImage(QImage image, const LinesSegment& linesSegment,
-                                               const QColor& color,
-                                               int thickness);
-
-    void updateFromInputPort();
-
 private:
     QWidget* m_widget = nullptr;
-    QScopedPointer<Ui::DrawLinesForm> m_ui;
+    QScopedPointer<Ui::DrawRectsForm> m_ui;
     QFutureWatcher<QPair<QImage, quint64>> m_watcher;
 
     // in
@@ -62,12 +59,12 @@ private:
     QImage m_lastPixmapToProcess;
     std::weak_ptr<ImageData> m_inImageData;
     // 1
-    std::weak_ptr<LinesSegmentData> m_inLinesSegmentData;
+    std::weak_ptr<RectsData> m_inRectsData;
     // 2
-    QColor m_lastColor;
+    QColor m_color;
     std::weak_ptr<VariantData> m_inColor;
     // 3
-    int m_lastThickness = 1;
+    int m_thickness;
     std::weak_ptr<VariantData> m_inThickness;
 
     // out
@@ -75,4 +72,4 @@ private:
 };
 
 
-#endif //DRAWLINESMODEL_H
+#endif //DRAWRECTSMODEL_H

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DrawLinesForm</class>
- <widget class="QWidget" name="DrawLinesForm">
+ <class>DrawRectsForm</class>
+ <widget class="QWidget" name="DrawRectsForm">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>316</width>
-    <height>143</height>
+    <width>315</width>
+    <height>101</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,13 +15,27 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QLabel" name="label_7">
+    <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>Image</string>
+      <string>Rect color</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Rect thickness</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Time ms:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label">
@@ -67,42 +81,14 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Line thickness</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>Line color</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Lines segment</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
+   <item row="1" column="1">
     <widget class="QSpinBox" name="sb_thickness">
      <property name="minimum">
       <number>1</number>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Time ms:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
+   <item row="2" column="1">
     <widget class="QSpinBox" name="sb_time">
      <property name="readOnly">
       <bool>true</bool>
