@@ -201,9 +201,14 @@ QPair<QList<QRect>, quint64> DetectMultiScaleModel::processMultiScale(const QIma
     QList<QRect> qRects;
     try {
         std::vector<cv::Rect> objects;
+        const int minW = minSize.width();
+        const int minH = minSize.height();
+        const int maxW = maxSize.width();
+        const int maxH = maxSize.height();
+
         const cv::Size minSizeCv(minSize.width(), minSize.height());
         const cv::Size maxSizeCv(maxSize.width(), maxSize.height());
-        cc.detectMultiScale(src, objects);//, scaleFactor, minNeighbors, flags, minSizeCv, maxSizeCv);
+        cc.detectMultiScale(src, objects, scaleFactor, minNeighbors, flags, minSizeCv, maxSizeCv);
         for (const auto& r: objects) {
             qRects.append(QRect(r.x, r.y, r.width, r.height));
         }

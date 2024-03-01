@@ -130,7 +130,6 @@ QPair<QImage, quint64> DrawRectsModel::processImage(QImage image, const Rects& r
     const QPen pen(color, thickness);
     painter.setPen(pen);
 
-    qDebug() << "Rects to paint:" << rects;
     painter.drawRects(rects);
 
     painter.end();

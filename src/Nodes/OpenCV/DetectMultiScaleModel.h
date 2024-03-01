@@ -75,10 +75,10 @@ private:
     int m_inMinNeighbors = 3;
     std::weak_ptr<VariantData> m_inMinNeighborsData;
     // 4
-    QSize m_inMinSize;
+    QSize m_inMinSize = QSize(0,0);
     std::weak_ptr<VariantData> m_inMinSizeData;
     // 5
-    QSize m_inMaxSize;
+    QSize m_inMaxSize = QSize(0,0);
     std::weak_ptr<VariantData> m_inMaxSizeData;
 
     // out
