@@ -20,7 +20,7 @@
 #include "Nodes/Images/ImageLoaderModel.hpp"
 #include "Nodes/Images/ImageShowModel.hpp"
 #include "Nodes/Images/ImageInfoModel.h"
-
+#include "Nodes/Images/DrawLinesModel.h"
 // Variables
 #include "Nodes/Variables/SizeVarModel.h"
 
