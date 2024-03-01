@@ -8,5 +8,6 @@
 #include "Nodes/Data/LinesSegmentData.h"
 #include "Nodes/Data/ImageData.h"
 #include "Nodes/Data/ImageFormatData.h"
+#include "Nodes/Data/FileData.h"
 
 #endif //DATAINCLUDE_H

@@ -83,6 +83,12 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Images/DrawLinesModel.cpp
         src/Nodes/Images/DrawLinesModel.h
         src/Nodes/Images/DrawLinesForm.ui
+        src/Nodes/OpenCV/CascadeClassifier.cpp
+        src/Nodes/OpenCV/CascadeClassifier.h
+        src/Nodes/Variables/FileVarModel.cpp
+        src/Nodes/Variables/FileVarModel.h
+        src/Nodes/Variables/FileVarForm.ui
+        src/Nodes/Data/FileData.h
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE

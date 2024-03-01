@@ -23,6 +23,7 @@
 #include "Nodes/Images/DrawLinesModel.h"
 // Variables
 #include "Nodes/Variables/SizeVarModel.h"
+#include "Nodes/Variables/FileVarModel.h"
 
 // opencv
 #include "Nodes/OpenCV/ColorCVModel.h"

@@ -64,6 +64,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> MainWindow::registerDataMode
     ret->registerModel<HoughLinesP>("OpenCV");
 
     ret->registerModel<SizeVarModel>("Variables");
+    ret->registerModel<FileVarModel>("Variables");
 
     return ret;
 }
