@@ -22,7 +22,7 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow {
+class MainWindow final : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -30,11 +30,17 @@ public:
 
     ~MainWindow() override;
 
+private slots:
+    void onActionSaveTriggered();
+
+    void onActionLoadTriggered();
+
 private:
     static std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registerDataModels();
 
 private:
     Ui::MainWindow* ui;
+    QtNodes::DataFlowGraphModel* m_model = nullptr;
     QtNodes::DataFlowGraphicsScene* m_scene = nullptr;
 };
 

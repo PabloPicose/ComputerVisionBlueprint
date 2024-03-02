@@ -18,15 +18,26 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    auto* model = new QtNodes::DataFlowGraphModel(registerDataModels());
-    m_scene = new QtNodes::DataFlowGraphicsScene(*model);
-    model->setParent(m_scene);
+    m_model = new QtNodes::DataFlowGraphModel(registerDataModels());
+    m_scene = new QtNodes::DataFlowGraphicsScene(*m_model);
+    m_model->setParent(m_scene);
 
     ui->nodes_graphicsView->setScene(m_scene);
+
+    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::onActionSaveTriggered);
+    connect(ui->actionLoad, &QAction::triggered, this, &MainWindow::onActionLoadTriggered);
 }
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::onActionSaveTriggered() {
+    m_scene->save();
+}
+
+void MainWindow::onActionLoadTriggered() {
+    m_scene->load();
 }
 
 std::shared_ptr<QtNodes::NodeDelegateModelRegistry> MainWindow::registerDataModels() {
