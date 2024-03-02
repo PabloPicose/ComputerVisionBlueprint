@@ -73,13 +73,13 @@ add_executable(OpenCVNodeEditor
         src/Nodes/OpenCV/ColorCVModel.h
         src/Nodes/OpenCV/DetectMultiScaleModel.cpp
         src/Nodes/OpenCV/DetectMultiScaleModel.h
-        src/Nodes/OpenCV/EqualizeHist.cpp
-        src/Nodes/OpenCV/EqualizeHist.h
+        src/Nodes/OpenCV/EqualizeHistModel.cpp
+        src/Nodes/OpenCV/EqualizeHistModel.h
         src/Nodes/OpenCV/GaussianBlurForm.ui
         src/Nodes/OpenCV/GaussianBlurModel.cpp
         src/Nodes/OpenCV/GaussianBlurModel.h
-        src/Nodes/OpenCV/HoughLinesP.cpp
-        src/Nodes/OpenCV/HoughLinesP.h
+        src/Nodes/OpenCV/HoughLinesPModel.cpp
+        src/Nodes/OpenCV/HoughLinesPModel.h
         src/Nodes/OpenCV/HoughLinesPForm.ui
         src/Nodes/Variables/FileVarForm.ui
         src/Nodes/Variables/FileVarModel.cpp
@@ -90,6 +90,11 @@ add_executable(OpenCVNodeEditor
         src/Widgets/MainWindow.cpp
         src/Widgets/MainWindow.h
         src/Widgets/MainWindow.ui
+        src/Nodes/Variables/RectVarModel.cpp
+        src/Nodes/Variables/RectVarModel.h
+        src/Nodes/Variables/RectVarForm.ui
+        src/Nodes/Data/PointData.h
+        src/Nodes/Data/RectData.h
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE

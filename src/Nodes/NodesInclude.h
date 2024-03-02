@@ -25,15 +25,16 @@
 // Variables
 #include "Nodes/Variables/SizeVarModel.h"
 #include "Nodes/Variables/FileVarModel.h"
+#include "Nodes/Variables/RectVarModel.h"
 
 // opencv
 #include "Nodes/OpenCV/ColorCVModel.h"
 #include "Nodes/OpenCV/BlurModel.h"
 #include "Nodes/OpenCV/CannyModel.h"
 #include "Nodes/OpenCV/GaussianBlurModel.h"
-#include "Nodes/OpenCV/HoughLinesP.h"
+#include "Nodes/OpenCV/HoughLinesPModel.h"
 #include "Nodes/OpenCV/CascadeClassifierModel.h"
-#include "Nodes/OpenCV/EqualizeHist.h"
+#include "Nodes/OpenCV/EqualizeHistModel.h"
 #include "Nodes/OpenCV/DetectMultiScaleModel.h"
 
 // data

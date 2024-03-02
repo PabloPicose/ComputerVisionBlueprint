@@ -2,7 +2,7 @@
 // Created by pablo on 2/27/24.
 //
 
-#include "HoughLinesP.h"
+#include "HoughLinesPModel.h"
 
 #include <opencv2/opencv.hpp>
 
@@ -14,7 +14,7 @@
 #include "Nodes/Conversor/MatQt.h"
 #include <QElapsedTimer>
 
-HoughLinesP::HoughLinesP() {
+HoughLinesPModel::HoughLinesPModel() {
     /*cv::CascadeClassifier faceCascade;
     cv::Mat image;
     std::vector<cv::Rect> faces;
@@ -24,21 +24,21 @@ HoughLinesP::HoughLinesP() {
     cv::dilate(image, image, cv::Mat(), cv::Point(-1, -1), 2, 1, 1);
     cv::HoughLinesP(image, image, 1, CV_PI / 180, 50, 50, 10);
     */
-    connect(&m_watcher, &QFutureWatcher<std::tuple<QPixmap, quint64>>::finished, this, &HoughLinesP::processFinished);
+    connect(&m_watcher, &QFutureWatcher<std::tuple<QPixmap, quint64>>::finished, this, &HoughLinesPModel::processFinished);
 }
 
-HoughLinesP::~HoughLinesP() {
+HoughLinesPModel::~HoughLinesPModel() {
 }
 
-QString HoughLinesP::caption() const {
+QString HoughLinesPModel::caption() const {
     return QString("Hough Lines Probabilistic");
 }
 
-QString HoughLinesP::name() const {
+QString HoughLinesPModel::name() const {
     return QString("HoughLinesP");
 }
 
-unsigned HoughLinesP::nPorts(QtNodes::PortType portType) const {
+unsigned HoughLinesPModel::nPorts(QtNodes::PortType portType) const {
     switch (portType) {
         case QtNodes::PortType::In:
             return 6;
@@ -49,7 +49,7 @@ unsigned HoughLinesP::nPorts(QtNodes::PortType portType) const {
     }
 }
 
-QtNodes::NodeDataType HoughLinesP::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const {
+QtNodes::NodeDataType HoughLinesPModel::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const {
     if (portType == QtNodes::PortType::In) {
         switch (portIndex) {
             case 0:
@@ -72,7 +72,7 @@ QtNodes::NodeDataType HoughLinesP::dataType(QtNodes::PortType portType, QtNodes:
     return LinesSegmentData().type();
 }
 
-void HoughLinesP::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNodes::PortIndex portIndex) {
+void HoughLinesPModel::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNodes::PortIndex portIndex) {
     switch (portIndex) {
         case 0: {
             m_inPixmapData = std::dynamic_pointer_cast<ImageData>(nodeData);
@@ -156,11 +156,11 @@ void HoughLinesP::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const Q
     requestProcess();
 }
 
-std::shared_ptr<QtNodes::NodeData> HoughLinesP::outData(const QtNodes::PortIndex port) {
+std::shared_ptr<QtNodes::NodeData> HoughLinesPModel::outData(const QtNodes::PortIndex port) {
     return m_outLinesData;
 }
 
-QWidget* HoughLinesP::embeddedWidget() {
+QWidget* HoughLinesPModel::embeddedWidget() {
     if (!m_widget) {
         m_ui = std::make_unique<Ui::HoughLinesPForm>();
         m_widget = new QWidget();
@@ -194,7 +194,7 @@ QWidget* HoughLinesP::embeddedWidget() {
     return m_widget;
 }
 
-void HoughLinesP::processFinished() {
+void HoughLinesPModel::processFinished() {
     m_ui->cb_running->setChecked(false);
     const auto tuple = m_watcher.result();
     if (m_inPixmapData.expired()) {
@@ -208,7 +208,7 @@ void HoughLinesP::processFinished() {
     requestProcess();
 }
 
-void HoughLinesP::requestProcess() {
+void HoughLinesPModel::requestProcess() {
     if (m_watcher.isRunning()) {
         return;
     }
@@ -224,7 +224,7 @@ void HoughLinesP::requestProcess() {
     m_watcher.setFuture(future);
 }
 
-std::tuple<LinesSegmentData, quint64> HoughLinesP::processImage(const QImage image, const double rho,
+std::tuple<LinesSegmentData, quint64> HoughLinesPModel::processImage(const QImage image, const double rho,
                                                                 const double theta,
                                                                 const int threshold,
                                                                 const double minLineLength, const double maxLineGap) {
@@ -241,7 +241,7 @@ std::tuple<LinesSegmentData, quint64> HoughLinesP::processImage(const QImage ima
     return std::make_tuple(LinesSegmentData(dst), timer.elapsed());
 }
 
-QImage HoughLinesP::getPixmapToProcess() {
+QImage HoughLinesPModel::getPixmapToProcess() {
     const auto lock = m_inPixmapData.lock();
     if (!lock) {
         return QImage();

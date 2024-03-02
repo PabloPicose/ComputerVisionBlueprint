@@ -18,13 +18,13 @@ namespace Ui {
 }
 
 
-class HoughLinesP final : public QtNodes::NodeDelegateModel {
+class HoughLinesPModel final : public QtNodes::NodeDelegateModel {
     Q_OBJECT
 
 public:
-    HoughLinesP();
+    HoughLinesPModel();
 
-    ~HoughLinesP() override;
+    ~HoughLinesPModel() override;
 
     QString caption() const override;
 

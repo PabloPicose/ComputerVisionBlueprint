@@ -2,36 +2,36 @@
 // Created by pablo on 3/1/24.
 //
 
-#include "EqualizeHist.h"
+#include "EqualizeHistModel.h"
 
 #include "Nodes/Conversor/MatQt.h"
 #include <QtConcurrent/QtConcurrent>
 #include <QLabel>
 
-EqualizeHist::EqualizeHist() {
-    connect(&m_watcher, &QFutureWatcher<QPair<QImage, quint64>>::finished, this, &EqualizeHist::processFinished);
+EqualizeHistModel::EqualizeHistModel() {
+    connect(&m_watcher, &QFutureWatcher<QPair<QImage, quint64>>::finished, this, &EqualizeHistModel::processFinished);
 }
 
-EqualizeHist::~EqualizeHist() {
+EqualizeHistModel::~EqualizeHistModel() {
 }
 
-QString EqualizeHist::caption() const {
+QString EqualizeHistModel::caption() const {
     return "Equalize Hist";
 }
 
-QString EqualizeHist::name() const {
+QString EqualizeHistModel::name() const {
     return "Equalize Hist";
 }
 
-unsigned EqualizeHist::nPorts(QtNodes::PortType portType) const {
+unsigned EqualizeHistModel::nPorts(QtNodes::PortType portType) const {
     return 1;
 }
 
-QtNodes::NodeDataType EqualizeHist::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const {
+QtNodes::NodeDataType EqualizeHistModel::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const {
     return ImageData().type();
 }
 
-void EqualizeHist::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNodes::PortIndex portIndex) {
+void EqualizeHistModel::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNodes::PortIndex portIndex) {
     switch (portIndex) {
         case 0:
             m_inImageData = std::dynamic_pointer_cast<ImageData>(nodeData);
@@ -48,18 +48,18 @@ void EqualizeHist::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const 
     }
 }
 
-std::shared_ptr<QtNodes::NodeData> EqualizeHist::outData(const QtNodes::PortIndex port) {
+std::shared_ptr<QtNodes::NodeData> EqualizeHistModel::outData(const QtNodes::PortIndex port) {
     return m_outImageData;
 }
 
-QWidget* EqualizeHist::embeddedWidget() {
+QWidget* EqualizeHistModel::embeddedWidget() {
     if (!m_widget) {
-        m_widget = new QLabel();
+        m_widget = new QLabel("Time: 0 ms  ");
     }
     return m_widget;
 }
 
-QString EqualizeHist::portCaption(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const {
+QString EqualizeHistModel::portCaption(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const {
     switch (portType) {
         case QtNodes::PortType::In:
             return QStringLiteral("Image 8-bit");
@@ -69,7 +69,17 @@ QString EqualizeHist::portCaption(QtNodes::PortType portType, QtNodes::PortIndex
     return NodeDelegateModel::portCaption(portType, portIndex);
 }
 
-void EqualizeHist::processFinished() {
+bool EqualizeHistModel::portCaptionVisible(QtNodes::PortType port, QtNodes::PortIndex port_index) const {
+    switch (port) {
+        case QtNodes::PortType::In:
+            return true;
+        default:
+            return NodeDelegateModel::portCaptionVisible(port, port_index);
+            break;
+    }
+}
+
+void EqualizeHistModel::processFinished() {
     const auto [image, time] = m_watcher.result();
     if (!m_inImageData.expired()) {
         m_outImageData = std::make_shared<ImageData>(image);
@@ -80,7 +90,7 @@ void EqualizeHist::processFinished() {
     requestProcess();
 }
 
-void EqualizeHist::requestProcess() {
+void EqualizeHistModel::requestProcess() {
     if (m_watcher.isRunning())
         return;
     if (m_lastImageToProcess.isNull())
@@ -93,7 +103,7 @@ void EqualizeHist::requestProcess() {
     m_watcher.setFuture(future);
 }
 
-QPair<QImage, quint64> EqualizeHist::equializeHist(const QImage& image) {
+QPair<QImage, quint64> EqualizeHistModel::equializeHist(const QImage& image) {
     QElapsedTimer timer;
     timer.start();
     const cv::Mat mat = QImageToMat(image);

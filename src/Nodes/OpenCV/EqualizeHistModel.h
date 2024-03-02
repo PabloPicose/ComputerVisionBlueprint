@@ -13,13 +13,13 @@
 
 class QLabel;
 
-class EqualizeHist final : public QtNodes::NodeDelegateModel {
+class EqualizeHistModel final : public QtNodes::NodeDelegateModel {
     Q_OBJECT
 
 public:
-    EqualizeHist();
+    EqualizeHistModel();
 
-    ~EqualizeHist() override;
+    ~EqualizeHistModel() override;
 
     QString caption() const override;
 
@@ -36,6 +36,8 @@ public:
     QWidget* embeddedWidget() override;
 
     QString portCaption(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const override;
+
+    bool portCaptionVisible(QtNodes::PortType, QtNodes::PortIndex) const override;
 
 private slots:
     void processFinished();

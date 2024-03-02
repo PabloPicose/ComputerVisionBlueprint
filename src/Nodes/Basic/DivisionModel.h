@@ -26,7 +26,6 @@ public:
                     return QStringLiteral("Dividend");
                 else if (portIndex == 1)
                     return QStringLiteral("Divisor");
-
                 break;
 
             case QtNodes::PortType::Out:
