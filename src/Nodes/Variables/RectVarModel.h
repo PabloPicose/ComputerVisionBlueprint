@@ -6,7 +6,7 @@
 #define RECTVARMODEL_H
 
 
-
+#include <opencv2/core/types.hpp>
 #include <QtNodes/NodeDelegateModel>
 #include "Nodes/Data/RectsData.h"
 #include "Nodes/Data/PointData.h"
@@ -18,6 +18,7 @@ namespace Ui {
 
 class RectVarModel final : public QtNodes::NodeDelegateModel {
     Q_OBJECT
+
 public:
     RectVarModel();
 
@@ -40,10 +41,16 @@ public:
     QString portCaption(QtNodes::PortType, QtNodes::PortIndex) const override;
 
     bool portCaptionVisible(QtNodes::PortType, QtNodes::PortIndex) const override { return true; }
+
+private slots:
+    void updateRect();
+
 private:
     QWidget* m_widget = nullptr;
     std::unique_ptr<Ui::RectVarForm> m_ui;
 
+    // in
+    QRect m_rect;
     std::weak_ptr<RectsData> m_inRectsData;
 
     // out
@@ -57,9 +64,9 @@ private:
     std::shared_ptr<VariantData> m_outWidth;
     //4
     std::shared_ptr<VariantData> m_outHeight;
-
+    // 5
+    std::shared_ptr<PointData> m_outCenter;
 };
-
 
 
 #endif //RECTVARMODEL_H
