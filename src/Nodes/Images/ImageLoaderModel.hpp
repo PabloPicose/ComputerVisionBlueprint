@@ -39,11 +39,19 @@ public:
 
     bool resizable() const override { return true; }
 
+    QJsonObject save() const override;
+
+    void load(QJsonObject const& jsonObj) override;
+
 protected:
     bool eventFilter(QObject *object, QEvent *event) override;
 
 private:
+    void loadImage();
+
+private:
     QLabel *_label;
 
+    QString m_path;
     std::shared_ptr<ImageData> m_outImageData;
 };

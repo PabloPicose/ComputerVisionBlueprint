@@ -95,6 +95,9 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Variables/RectVarForm.ui
         src/Nodes/Data/PointData.h
         src/Nodes/Data/RectData.h
+        src/Nodes/Images/ConvertImageToModel.cpp
+        src/Nodes/Images/ConvertImageToModel.h
+        src/Nodes/Images/ConvertImageToForm.ui
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE

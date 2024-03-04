@@ -119,7 +119,6 @@ QWidget* RectVarModel::embeddedWidget() {
         connect(m_ui->sb_y, qOverload<int>(&QSpinBox::valueChanged), this, &RectVarModel::updateRect);
         connect(m_ui->sb_width, qOverload<int>(&QSpinBox::valueChanged), this, &RectVarModel::updateRect);
         connect(m_ui->sb_height, qOverload<int>(&QSpinBox::valueChanged), this, &RectVarModel::updateRect);
-
     }
     return m_widget;
 }
@@ -155,6 +154,29 @@ QString RectVarModel::portCaption(QtNodes::PortType port, QtNodes::PortIndex por
     }
 }
 
+QJsonObject RectVarModel::save() const {
+    QJsonObject modelJson = NodeDelegateModel::save();
+    const auto lock = m_inRectsData.lock();
+    if (!lock && m_ui) {
+        modelJson["x"] = m_ui->sb_x->value();
+        modelJson["y"] = m_ui->sb_y->value();
+        modelJson["width"] = m_ui->sb_width->value();
+        modelJson["height"] = m_ui->sb_height->value();
+    }
+    return modelJson;
+}
+
+void RectVarModel::load(QJsonObject const& jsonObj) {
+    const auto lock = m_inRectsData.lock();
+    if (!lock && m_ui) {
+        m_ui->sb_x->setValue(jsonObj["x"].toInt());
+        m_ui->sb_y->setValue(jsonObj["y"].toInt());
+        m_ui->sb_width->setValue(jsonObj["width"].toInt());
+        m_ui->sb_height->setValue(jsonObj["height"].toInt());
+    }
+    updateRect();
+}
+
 void RectVarModel::updateRect() {
     // update the m_rect, if inRectsData is expired take the values from the m_ui
     const auto lockRectsData = m_inRectsData.lock();
@@ -174,14 +196,17 @@ void RectVarModel::updateRect() {
             m_ui->sb_y->setValue(m_rect.y());
             m_ui->sb_width->setValue(m_rect.width());
             m_ui->sb_height->setValue(m_rect.height());
-            m_ui->sb_center_x->setValue(m_rect.center().x());
-            m_ui->sb_center_y->setValue(m_rect.center().y());
         }
     } else if (m_ui) {
         m_rect.setX(m_ui->sb_x->value());
         m_rect.setY(m_ui->sb_y->value());
         m_rect.setWidth(m_ui->sb_width->value());
         m_rect.setHeight(m_ui->sb_height->value());
+    }
+    // update the center
+    if (m_ui) {
+        m_ui->sb_center_x->setValue(m_rect.center().x());
+        m_ui->sb_center_y->setValue(m_rect.center().y());
     }
     // update the out data
     m_outRectsData = std::make_shared<RectsData>(QList{m_rect});

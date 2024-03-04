@@ -48,13 +48,22 @@ void CascadeClassifier::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, c
             const auto lockData = m_inFileData.lock();
             if (lockData) {
                 const auto path = lockData->fileName();
-                m_outFileData = std::make_shared<CascadeClassifierData>(path);
-                if (m_ui) {
-                    const bool isLoaded = !m_outFileData->isEmpty();
-                    m_ui->cb_loaded->setChecked(isLoaded);
+                try {
+                    cv::CascadeClassifier cascadeClassifier;
+                    cascadeClassifier.load(path.toStdString());
+                    m_outFileData = std::make_shared<CascadeClassifierData>(cascadeClassifier);
+                    if (m_ui) {
+                        const bool isLoaded = !m_outFileData->isEmpty();
+                        m_ui->cb_loaded->setChecked(isLoaded);
+                    }
+                } catch (cv::Exception& e) {
+                    qWarning() << e.what();
+                    m_outFileData.reset();
+                    if (m_ui) {
+                        m_ui->cb_loaded->setChecked(false);
+                    }
                 }
-            }
-            else {
+            } else {
                 m_outFileData.reset();
                 if (m_ui) {
                     m_ui->cb_loaded->setChecked(false);

@@ -96,6 +96,21 @@ QWidget* SizeVarModel::embeddedWidget() {
     return m_widget;
 }
 
+QJsonObject SizeVarModel::save() const {
+    QJsonObject modelJson = NodeDelegateModel::save();
+    if (m_inSizeData.expired() && m_ui) {
+        modelJson["width"] = m_ui->sb_width->value();
+        modelJson["height"] = m_ui->sb_height->value();
+    }
+    return modelJson;
+}
+
+void SizeVarModel::load(QJsonObject const& jsonObj) {
+    if (m_inSizeData.expired() && m_ui) {
+        setOutSize(QSize(jsonObj["width"].toInt(), jsonObj["height"].toInt()));
+    }
+}
+
 void SizeVarModel::setOutSize(const QSize& size) {
     // updates the size from incoming data
     m_outSize = size;

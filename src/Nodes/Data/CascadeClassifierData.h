@@ -18,6 +18,10 @@ public:
         m_cascadeClassifier->load(filename.toStdString());
     }
 
+    explicit CascadeClassifierData(const cv::CascadeClassifier& cascadeClassifier) : m_cascadeClassifier(
+        std::make_shared<cv::CascadeClassifier>(cascadeClassifier)) {
+    }
+
 
     QtNodes::NodeDataType type() const override {
         return QtNodes::NodeDataType{"cascadeClassifier", "Cascade Classifier"};

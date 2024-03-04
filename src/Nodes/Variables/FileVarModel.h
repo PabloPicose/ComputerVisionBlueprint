@@ -36,6 +36,10 @@ public:
 
     QWidget* embeddedWidget() override;
 
+    QJsonObject save() const override;
+
+    void load(QJsonObject const& jsonObj) override;
+
 private slots:
     void onBrowseButtonClicked();
 

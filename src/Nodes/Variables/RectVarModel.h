@@ -42,6 +42,10 @@ public:
 
     bool portCaptionVisible(QtNodes::PortType, QtNodes::PortIndex) const override { return true; }
 
+    QJsonObject save() const override;
+
+    void load(QJsonObject const& jsonObj) override;
+
 private slots:
     void updateRect();
 

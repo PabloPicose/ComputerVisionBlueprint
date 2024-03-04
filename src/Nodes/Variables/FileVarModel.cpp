@@ -60,6 +60,19 @@ QWidget* FileVarModel::embeddedWidget() {
     return m_widget;
 }
 
+QJsonObject FileVarModel::save() const {
+    QJsonObject modelJson = NodeDelegateModel::save();
+    modelJson["path"] = m_ui->le_path->text();
+    return modelJson;
+}
+
+void FileVarModel::load(QJsonObject const& jsonObj) {
+    const QJsonValue path = jsonObj["path"];
+    if (!path.isUndefined()) {
+        onTextChanged(path.toString());
+    }
+}
+
 void FileVarModel::onBrowseButtonClicked() {
     // open file dialog from the home directory
     const QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Open File"), QDir::homePath());
