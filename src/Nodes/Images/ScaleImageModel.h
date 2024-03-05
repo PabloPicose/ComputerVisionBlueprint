@@ -1,25 +1,26 @@
 //
-// Created by pablo on 2/29/24.
+// Created by pablo on 3/5/24.
 //
 
-#ifndef IMAGEINFOMODEL_H
-#define IMAGEINFOMODEL_H
+#ifndef SCALEIMAGEMODEL_H
+#define SCALEIMAGEMODEL_H
+
 
 #include <QtNodes/NodeDelegateModel>
 #include "Nodes/Data/ImageData.h"
 #include "Nodes/Data/VariantData.h"
-#include "Nodes/Data/ImageFormatData.h"
 
 namespace Ui {
-    class ImageInfoForm;
+    class ScaleImageForm;
 }
 
-class ImageInfoModel final : public QtNodes::NodeDelegateModel {
+class ScaleImageModel final : public QtNodes::NodeDelegateModel {
     Q_OBJECT
-public:
-    ImageInfoModel();
 
-    ~ImageInfoModel() override;
+public:
+    ScaleImageModel();
+
+    ~ScaleImageModel() override;
 
     QString caption() const override;
 
@@ -34,35 +35,23 @@ public:
     std::shared_ptr<QtNodes::NodeData> outData(const QtNodes::PortIndex port) override;
 
     QWidget* embeddedWidget() override;
-
 private:
-    void invalidateOutData();
+    static QPair<QImage, quint64> processImage(const QImage& image, const QSize& scaleFactor);
 
-    void updateData();
-
-    static QString formatToString(QImage::Format format);
-
+    void requestProcess();
 private:
-    std::unique_ptr<Ui::ImageInfoForm> m_ui;
     QWidget* m_widget = nullptr;
+    QScopedPointer<Ui::ScaleImageForm> m_ui;
 
     // in
+    // 0
     std::weak_ptr<ImageData> m_inImageData;
+    // 1
+    std::weak_ptr<VariantData> m_inScaleFactor;
     // out
     // 0
     std::shared_ptr<ImageData> m_outImageData;
-    // 1
-    std::shared_ptr<VariantData> m_outIsNull;
-    // 2
-    std::shared_ptr<ImageFormatData> m_outFormat;
-    // 3
-    std::shared_ptr<VariantData> m_outIsGrayscale;
-    // 4
-    std::shared_ptr<VariantData> m_outHasAlpha;
-    // 5
-    std::shared_ptr<VariantData> m_outSize;
 };
 
 
-
-#endif //IMAGEINFOMODEL_H
+#endif //SCALEIMAGEMODEL_H

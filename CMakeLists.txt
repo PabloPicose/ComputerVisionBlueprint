@@ -10,7 +10,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 #find opencv
-find_package(OpenCV REQUIRED QUIET)
+find_package(OpenCV CONFIG REQUIRED)
 
 add_subdirectory(3rdparty/nodeeditor)
 
@@ -98,11 +98,16 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Images/ConvertImageToModel.cpp
         src/Nodes/Images/ConvertImageToModel.h
         src/Nodes/Images/ConvertImageToForm.ui
+        src/Nodes/Images/ScaleImageModel.cpp
+        src/Nodes/Images/ScaleImageModel.h
+        src/Nodes/Images/ScaleImageForm.ui
+        src/Nodes/DataOperations/ScaleRects.cpp
+        src/Nodes/DataOperations/ScaleRects.h
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE
         QtNodes::QtNodes
-        opencv::opencv
+        ${OpenCV_LIBS}
         Qt6::Concurrent
 )
 

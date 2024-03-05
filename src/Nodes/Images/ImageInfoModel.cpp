@@ -24,7 +24,7 @@ unsigned ImageInfoModel::nPorts(QtNodes::PortType portType) const {
         case QtNodes::PortType::In:
             return 1;
         case QtNodes::PortType::Out:
-            return 5;
+            return 6;
         default:
             return 0;
             break;
@@ -47,6 +47,8 @@ QtNodes::NodeDataType ImageInfoModel::dataType(QtNodes::PortType portType, QtNod
                     return VariantData(false).type();
                 case 4:
                     return VariantData(false).type();
+                case 5:
+                    return VariantData(QSize()).type();
                 default:
                     break;
             }
@@ -80,6 +82,8 @@ std::shared_ptr<QtNodes::NodeData> ImageInfoModel::outData(const QtNodes::PortIn
             return m_outIsGrayscale;
         case 4:
             return m_outHasAlpha;
+        case 5:
+            return m_outSize;
         default:
             return nullptr;
     }
@@ -100,8 +104,7 @@ void ImageInfoModel::invalidateOutData() {
     m_outFormat.reset();
     m_outIsGrayscale.reset();
     m_outHasAlpha.reset();
-
-
+    m_outSize.reset();
 }
 
 void ImageInfoModel::updateData() {
@@ -114,6 +117,7 @@ void ImageInfoModel::updateData() {
         m_outFormat = std::make_shared<ImageFormatData>(imageLock->image().format());
         m_outIsGrayscale = std::make_shared<VariantData>(imageLock->image().isGrayscale());
         m_outHasAlpha = std::make_shared<VariantData>(imageLock->image().hasAlphaChannel());
+        m_outSize = std::make_shared<VariantData>(imageLock->image().size());
         if (m_ui) {
             m_ui->cb_isNull->setChecked(m_outIsNull->variant().toBool());
             m_ui->cb_isGrayScale->setChecked(m_outIsGrayscale->variant().toBool());
@@ -126,6 +130,7 @@ void ImageInfoModel::updateData() {
     emit dataUpdated(2);
     emit dataUpdated(3);
     emit dataUpdated(4);
+    emit dataUpdated(5);
 }
 
 QString ImageInfoModel::formatToString(QImage::Format const format) {

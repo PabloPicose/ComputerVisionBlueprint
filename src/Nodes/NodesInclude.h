@@ -23,10 +23,14 @@
 #include "Nodes/Images/DrawLinesModel.h"
 #include "Nodes/Images/DrawRectsModel.h"
 #include "Nodes/Images/ConvertImageToModel.h"
+#include "Nodes/Images/ScaleImageModel.h"
 // Variables
 #include "Nodes/Variables/SizeVarModel.h"
 #include "Nodes/Variables/FileVarModel.h"
 #include "Nodes/Variables/RectVarModel.h"
+
+// DataOperations
+#include "Nodes/DataOperations/ScaleRects.h"
 
 // opencv
 #include "Nodes/OpenCV/ColorCVModel.h"

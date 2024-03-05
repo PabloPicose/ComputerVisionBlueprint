@@ -59,6 +59,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> MainWindow::registerDataMode
     ret->registerModel<DrawLinesModel>("Images");
     ret->registerModel<DrawRectsModel>("Images");
     ret->registerModel<ConvertImageToModel>("Images");
+    ret->registerModel<ScaleImageModel>("Images");
 
     ret->registerModel<ColorCVModel>("OpenCV");
     ret->registerModel<BlurModel>("OpenCV");
@@ -73,6 +74,8 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> MainWindow::registerDataMode
     ret->registerModel<SizeVarModel>("Variables");
     ret->registerModel<FileVarModel>("Variables");
     ret->registerModel<RectVarModel>("Variables");
+
+    ret->registerModel<ScaleRects>("Data Operations");
 
     return ret;
 }
