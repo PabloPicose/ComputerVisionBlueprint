@@ -96,13 +96,13 @@ Before you begin, ensure you have the following installed on your system:
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-1. **Scale image**
-    In this example we will use the "Scale" node to resize an image. The node has two input ports, one for the image and another for the scale factor. The output port will be the resized image. We will scale the image by a factor of 0.15
-    ![](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/gif/scale.gif)
-
-2. **Convert color**
+1. **Convert color**
     In this example we will use the "Convert color" node to convert an image from BGR to Grayscale. The node has two input ports, one for the image and another for the conversion code. The output port will be the converted image. We will use the conversion code "Grayscale8"
     ![](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/gif/convert_color.gif)
+
+2. **Scale image**
+    In this example we will use the "Scale" node to resize an image. The node has two input ports, one for the image and another for the scale factor. The output port will be the resized image. We will scale the image by a factor of 0.15
+    ![](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/gif/scale.gif)
 
 3. **Detect faces**
     In this example we will use the "Detect multiscale" node to detect faces in an image. First we will use the Equalize Hist node to convert the image to an image with better contrast. Then with the "File" node we will load the cascade file and create the CascadeClassifier. Finally we will use the "Detect multiscale" node to detect the faces in the image. The output is a list of rectangles that represent the faces. Then we can simply draw the rectangles in the resized image (the equalized image or the scaled).
