@@ -18,7 +18,7 @@ QString ScaleImageModel::caption() const {
 }
 
 QString ScaleImageModel::name() const {
-    return QString("ScaleImage");
+    return QString("Scale Image");
 }
 
 unsigned ScaleImageModel::nPorts(QtNodes::PortType portType) const {

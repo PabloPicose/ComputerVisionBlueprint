@@ -24,6 +24,7 @@
 #include "Nodes/Images/DrawRectsModel.h"
 #include "Nodes/Images/ConvertImageToModel.h"
 #include "Nodes/Images/ScaleImageModel.h"
+#include "Nodes/Images/CutImageModel.h"
 // Variables
 #include "Nodes/Variables/SizeVarModel.h"
 #include "Nodes/Variables/FileVarModel.h"

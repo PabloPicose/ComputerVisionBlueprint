@@ -21,7 +21,7 @@ QString ColorCVModel::caption() const {
 }
 
 QString ColorCVModel::name() const {
-    return "ColorCV";
+    return "Color OpenCV";
 }
 
 unsigned ColorCVModel::nPorts(QtNodes::PortType portType) const {

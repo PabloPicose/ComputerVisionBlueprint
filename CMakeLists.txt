@@ -106,6 +106,8 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Variables/RectModel.cpp
         src/Nodes/Variables/RectModel.h
         src/Nodes/Variables/RectForm.ui
+        src/Nodes/Images/CutImageModel.cpp
+        src/Nodes/Images/CutImageModel.h
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE

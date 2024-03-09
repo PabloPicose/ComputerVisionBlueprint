@@ -20,9 +20,9 @@ public:
     ~ImageLoaderModel() override = default;
 
 public:
-    QString caption() const override { return QString("Image Source"); }
+    QString caption() const override { return QString("Image source"); }
 
-    QString name() const override { return QString("ImageLoaderModel"); }
+    QString name() const override { return QString("Image source"); }
 
 public:
     virtual QString modelName() const { return QString("Source Image"); }

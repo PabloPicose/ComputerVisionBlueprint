@@ -149,8 +149,8 @@ void RectVarModel::updateRect() {
         }
     }
     // debug the outRectsData count and the outRectsDataList count
-    qDebug() << "RectVarModel::updateRect outRectsData count: " << m_outRectsDataList.size();
-    qDebug() << "RectVarModel::updateRect outRectsDataList count: " << m_outRectsDataList.size();
+    //qDebug() << "RectVarModel::updateRect outRectsData count: " << m_outRectsDataList.size();
+    //qDebug() << "RectVarModel::updateRect outRectsDataList count: " << m_outRectsDataList.size();
 
     // for each out node, emit dataUpdated
     for (int i = 0; i < nPorts(QtNodes::PortType::Out); ++i) {

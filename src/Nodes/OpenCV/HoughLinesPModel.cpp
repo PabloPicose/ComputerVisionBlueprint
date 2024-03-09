@@ -35,7 +35,7 @@ QString HoughLinesPModel::caption() const {
 }
 
 QString HoughLinesPModel::name() const {
-    return QString("HoughLinesP");
+    return QString("Hough Lines Probabilistic");
 }
 
 unsigned HoughLinesPModel::nPorts(QtNodes::PortType portType) const {

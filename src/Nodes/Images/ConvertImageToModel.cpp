@@ -21,7 +21,7 @@ QString ConvertImageToModel::caption() const {
 }
 
 QString ConvertImageToModel::name() const {
-    return QString("ConvertImage");
+    return QString("Convert Image");
 }
 
 unsigned ConvertImageToModel::nPorts(QtNodes::PortType portType) const {

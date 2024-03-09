@@ -25,7 +25,7 @@ QString GaussianBlurModel::caption() const {
 }
 
 QString GaussianBlurModel::name() const {
-    return "GaussianBlur";
+    return "Gaussian Blur";
 }
 
 unsigned GaussianBlurModel::nPorts(QtNodes::PortType portType) const {
