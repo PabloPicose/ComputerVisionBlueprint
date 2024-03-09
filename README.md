@@ -77,10 +77,25 @@
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+# About the Project
 
 [![Product Name Screen Shot][product-screenshot]](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/images/preview.png)
 
+The OpenCVNodeEditor project is an innovative open-source tool designed to simplify the process of image analysis and manipulation using OpenCV through a user-friendly graphical node editor interface. This project leverages the power of Qt 6 for its GUI components, CMake for building and compiling, and integrates OpenCV for comprehensive image processing functionalities.
+
+## Key Features
+
+- **Graphical Node-Based Editor**: At the heart of OpenCVNodeEditor is a visually intuitive node editor that allows users to create, connect, and configure a series of processing steps in an easy-to-understand graphical format. This approach demystifies complex image processing workflows, making them accessible to both novices and experienced professionals alike.
+
+- **Extensive OpenCV Integration**: The project fully harnesses the capabilities of OpenCV, one of the most robust and versatile libraries for computer vision and image processing. Users can apply various operations such as face detection, image filtering, color conversion, and much more, directly within the node editor interface.
+
+- **Custom Node Development**: Users are not limited to predefined nodes. The OpenCVNodeEditor platform supports the creation of custom nodes, enabling the addition of unique image processing functionalities tailored to specific project needs.
+
+- **Cross-Platform Compatibility**: Thanks to Qt 6, the project is designed to be cross-platform, supporting various operating systems including Windows, macOS, and Linux. This ensures that a wide range of users can access and benefit from the tool, regardless of their preferred development environment.
+
+## Motivation
+
+The motivation behind OpenCVNodeEditor was to address the steep learning curve associated with image processing and computer vision applications. By providing a graphical interface for constructing and visualizing workflows, the project aims to lower the barrier to entry, fostering innovation and experimentation in fields ranging from academic research to industry-specific applications.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -118,12 +133,27 @@ Before you begin, ensure you have the following installed on your system:
     Ensure OpenCV is installed on your system. You can download and install it from the OpenCV official website or use your distribution's package manager
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Example detected faces
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
 1. **Scale image**
+    In this example we will use the "Scale" node to resize an image. The node has two input ports, one for the image and another for the scale factor. The output port will be the resized image. We will scale the image by a factor of 0.15
     ![](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/gif/scale.gif)
+
+2. **Convert color**
+    In this example we will use the "Convert color" node to convert an image from BGR to Grayscale. The node has two input ports, one for the image and another for the conversion code. The output port will be the converted image. We will use the conversion code "Grayscale8"
+    ![](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/gif/convert_color.gif)
+
+3. **Detect faces**
+    In this example we will use the "Detect multiscale" node to detect faces in an image. First we will use the Equalize Hist node to convert the image to an image with better contrast. Then with the "File" node we will load the cascade file and create the CascadeClassifier. Finally we will use the "Detect multiscale" node to detect the faces in the image. The output is a list of rectangles that represent the faces. Then we can simply draw the rectangles in the resized image (the equalized image or the scaled).
+    
+     We will use the cascade file "haarcascade_frontalface_alt.xml" that can be found in the [OpenCV repository frontal face alt](https://github.com/opencv/opencv/blob/4.x/data/haarcascades/haarcascade_frontalface_alt.xml) link.
+    ![](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/gif/detect_multiscale.gif)
+
+4. **Detect faces on original**
+   We will scale the Rectangles x 15 and draw them on the original image
+    ![](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/gif/detect_multiscale_on_original.gif)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -133,10 +163,12 @@ Use this space to show useful examples of how a project can be used. Additional 
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [ ] Files from link 
+- [ ] Input video
+    - [ ] Camera input
+    - [ ] Take screenshot from video to an image
+- [ ] Draws 
+    - [ ] Circles
 
 See the [open issues](https://github.com/PabloPicose/OpenCVNodeEditor/issues) for a full list of proposed features (and known issues).
 
