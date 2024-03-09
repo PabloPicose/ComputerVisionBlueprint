@@ -15,6 +15,7 @@ find_package(OpenCV CONFIG REQUIRED)
 add_subdirectory(3rdparty/nodeeditor)
 
 add_executable(OpenCVNodeEditor
+        resources/images/images.qrc
         src/main.cpp
         #src/Nodes/OpenCV/FacialDetectorModel.cpp
         #src/Nodes/OpenCV/FacialDetectorModel.h
@@ -92,7 +93,6 @@ add_executable(OpenCVNodeEditor
         src/Widgets/MainWindow.ui
         src/Nodes/Variables/RectVarModel.cpp
         src/Nodes/Variables/RectVarModel.h
-        src/Nodes/Variables/RectVarForm.ui
         src/Nodes/Data/PointData.h
         src/Nodes/Data/RectData.h
         src/Nodes/Images/ConvertImageToModel.cpp
@@ -103,6 +103,9 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Images/ScaleImageForm.ui
         src/Nodes/DataOperations/ScaleRects.cpp
         src/Nodes/DataOperations/ScaleRects.h
+        src/Nodes/Variables/RectModel.cpp
+        src/Nodes/Variables/RectModel.h
+        src/Nodes/Variables/RectForm.ui
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE

@@ -26,6 +26,7 @@ static void setStyle() {
 
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
+    a.setWindowIcon(QIcon(":/images/logo.png"));
     setStyle();
 
     MainWindow w;

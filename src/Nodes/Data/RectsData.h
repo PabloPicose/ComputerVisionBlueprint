@@ -15,6 +15,8 @@ class RectsData final : public QtNodes::NodeData {
 public:
     RectsData() {
     }
+    explicit RectsData(const QRect& rect) : m_rects({rect}) {
+    }
     explicit RectsData(const QList<QRect>& rects) : m_rects(rects) {
     }
 

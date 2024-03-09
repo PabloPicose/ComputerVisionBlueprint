@@ -74,6 +74,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> MainWindow::registerDataMode
     ret->registerModel<SizeVarModel>("Variables");
     ret->registerModel<FileVarModel>("Variables");
     ret->registerModel<RectVarModel>("Variables");
+    ret->registerModel<RectModel>("Variables");
 
     ret->registerModel<ScaleRects>("Data Operations");
 

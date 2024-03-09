@@ -9,12 +9,10 @@
 #include <opencv2/core/types.hpp>
 #include <QtNodes/NodeDelegateModel>
 #include "Nodes/Data/RectsData.h"
+#include "Nodes/Data/RectData.h"
 #include "Nodes/Data/PointData.h"
 #include "Nodes/Data/VariantData.h"
 
-namespace Ui {
-    class RectVarForm;
-}
 
 class RectVarModel final : public QtNodes::NodeDelegateModel {
     Q_OBJECT
@@ -42,34 +40,32 @@ public:
 
     bool portCaptionVisible(QtNodes::PortType, QtNodes::PortIndex) const override { return true; }
 
-    QJsonObject save() const override;
+    //QJsonObject save() const override;
 
-    void load(QJsonObject const& jsonObj) override;
+    //void load(QJsonObject const& jsonObj) override;
+
+    QtNodes::ConnectionPolicy portConnectionPolicy(QtNodes::PortType, QtNodes::PortIndex) const override;
+
 
 private slots:
     void updateRect();
 
+    void inputConnectionDeleted(QtNodes::ConnectionId const&) override;
+
+    void inputConnectionCreated(QtNodes::ConnectionId const&) override;
+
 private:
     QWidget* m_widget = nullptr;
-    std::unique_ptr<Ui::RectVarForm> m_ui;
 
     // in
-    QRect m_rect;
-    std::weak_ptr<RectsData> m_inRectsData;
+    QMap<int, std::weak_ptr<RectsData>> m_inVRectsDataMap;
+    QMap<int, std::weak_ptr<RectData>> m_inRectDataMap;
+    //std::weak_ptr<RectsData> m_inRectsData;
 
     // out
     //0
     std::shared_ptr<RectsData> m_outRectsData;
-    //1
-    std::shared_ptr<PointData> m_outCenterPointData;
-    //2
-    std::shared_ptr<PointData> m_outTopLeftPointData;
-    //3
-    std::shared_ptr<VariantData> m_outWidth;
-    //4
-    std::shared_ptr<VariantData> m_outHeight;
-    // 5
-    std::shared_ptr<PointData> m_outCenter;
+    QList<std::shared_ptr<RectData>> m_outRectsDataList;
 };
 
 

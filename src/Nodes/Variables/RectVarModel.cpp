@@ -3,7 +3,6 @@
 //
 
 #include "RectVarModel.h"
-#include "ui_RectVarForm.h"
 
 RectVarModel::RectVarModel() {
 }
@@ -12,19 +11,20 @@ RectVarModel::~RectVarModel() {
 }
 
 QString RectVarModel::caption() const {
-    return "Rect";
+    return "Rects";
 }
 
 QString RectVarModel::name() const {
-    return "Rect";
+    return "Rects";
 }
 
 unsigned RectVarModel::nPorts(QtNodes::PortType portType) const {
     switch (portType) {
         case QtNodes::PortType::In:
-            return 1;
+            return 2;
         case QtNodes::PortType::Out:
-            return 5;
+            return m_outRectsDataList.size() + 1;
+            return m_outRectsData ? m_outRectsData->rects().size() : 0;
         default:
             return 0;
     }
@@ -36,6 +36,8 @@ QtNodes::NodeDataType RectVarModel::dataType(QtNodes::PortType portType, QtNodes
             switch (portIndex) {
                 case 0:
                     return RectsData().type();
+                case 1:
+                    return RectData().type();
                 default:
                     return VariantData().type();
             }
@@ -43,18 +45,8 @@ QtNodes::NodeDataType RectVarModel::dataType(QtNodes::PortType portType, QtNodes
             switch (portIndex) {
                 case 0:
                     return RectsData().type();
-                case 1:
-                    return PointData().type();
-                case 2:
-                    return PointData().type();
-                case 3:
-                    return VariantData(0).type();
-                case 4:
-                    return VariantData(0).type();
-                case 5:
-                    return PointData().type();
                 default:
-                    return VariantData().type();
+                    return RectData().type();
             }
         default:
             return VariantData().type();
@@ -63,24 +55,29 @@ QtNodes::NodeDataType RectVarModel::dataType(QtNodes::PortType portType, QtNodes
 
 void RectVarModel::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNodes::PortIndex portIndex) {
     switch (portIndex) {
-        case 0:
-            m_inRectsData = std::dynamic_pointer_cast<RectsData>(nodeData);
-            if (m_inRectsData.expired()) {
-                if (m_ui) {
-                    m_ui->sb_x->setEnabled(true);
-                    m_ui->sb_y->setEnabled(true);
-                    m_ui->sb_width->setEnabled(true);
-                    m_ui->sb_height->setEnabled(true);
-                }
-            } else {
-                if (m_ui) {
-                    m_ui->sb_x->setEnabled(false);
-                    m_ui->sb_y->setEnabled(false);
-                    m_ui->sb_width->setEnabled(false);
-                    m_ui->sb_height->setEnabled(false);
+        case 0: {
+            // detect in the map which value is expired and update it inserting the new value
+            for (auto it = m_inVRectsDataMap.begin(); it != m_inVRectsDataMap.end(); ++it) {
+                if (it.value().expired()) {
+                    m_inVRectsDataMap.insert(it.key(), std::dynamic_pointer_cast<RectsData>(nodeData));
+                    break;
                 }
             }
-            break;
+        }
+        break;
+        case 1: {
+            // detect in the map which value is expired and update it
+            for (auto it = m_inRectDataMap.begin(); it != m_inRectDataMap.end(); ++it) {
+                if (it.value().expired()) {
+                    const int key = it.key();
+                    const auto lock = std::dynamic_pointer_cast<RectData>(nodeData);
+                    if (lock) {
+                        m_inRectDataMap.insert(key, lock);
+                    }
+                    break;
+                }
+            }
+        }
         default:
             break;
     }
@@ -91,34 +88,13 @@ std::shared_ptr<QtNodes::NodeData> RectVarModel::outData(const QtNodes::PortInde
     switch (port) {
         case 0:
             return m_outRectsData;
-        case 1:
-            return m_outCenterPointData;
-        case 2:
-            return m_outTopLeftPointData;
-        case 3:
-            return m_outWidth;
-        case 4:
-            return m_outHeight;
-        case 5:
-            return m_outCenter;
         default:
-            return nullptr;
+            return m_outRectsDataList.at(port - 1);
     }
 }
 
 QWidget* RectVarModel::embeddedWidget() {
     if (!m_widget) {
-        m_ui = std::make_unique<Ui::RectVarForm>();
-        m_widget = new QWidget();
-        m_ui->setupUi(m_widget);
-        // widgets are QSpinBoxes:
-        // top left widgets: sb_x and sb_y
-        // size widgets: sb_width and sb_height
-        // center widgets: sb_center_x and sb_center_y only read
-        connect(m_ui->sb_x, qOverload<int>(&QSpinBox::valueChanged), this, &RectVarModel::updateRect);
-        connect(m_ui->sb_y, qOverload<int>(&QSpinBox::valueChanged), this, &RectVarModel::updateRect);
-        connect(m_ui->sb_width, qOverload<int>(&QSpinBox::valueChanged), this, &RectVarModel::updateRect);
-        connect(m_ui->sb_height, qOverload<int>(&QSpinBox::valueChanged), this, &RectVarModel::updateRect);
     }
     return m_widget;
 }
@@ -130,95 +106,79 @@ QString RectVarModel::portCaption(QtNodes::PortType port, QtNodes::PortIndex por
                 case 0:
                     return "Rects";
                 default:
-                    return "Unknown";
+                    return "Rect";
             }
         case QtNodes::PortType::Out:
             switch (port_index) {
                 case 0:
                     return "Rects";
-                case 1:
-                    return "Center Point";
-                case 2:
-                    return "Top Left Point";
-                case 3:
-                    return "Width";
-                case 4:
-                    return "Height";
-                case 5:
-                    return "Center";
                 default:
-                    return "Unknown";
+                    return "Rect";
             }
         default:
             return NodeDelegateModel::portCaption(port, port_index);
     }
 }
 
-QJsonObject RectVarModel::save() const {
-    QJsonObject modelJson = NodeDelegateModel::save();
-    const auto lock = m_inRectsData.lock();
-    if (!lock && m_ui) {
-        modelJson["x"] = m_ui->sb_x->value();
-        modelJson["y"] = m_ui->sb_y->value();
-        modelJson["width"] = m_ui->sb_width->value();
-        modelJson["height"] = m_ui->sb_height->value();
-    }
-    return modelJson;
-}
 
-void RectVarModel::load(QJsonObject const& jsonObj) {
-    const auto lock = m_inRectsData.lock();
-    if (!lock && m_ui) {
-        m_ui->sb_x->setValue(jsonObj["x"].toInt());
-        m_ui->sb_y->setValue(jsonObj["y"].toInt());
-        m_ui->sb_width->setValue(jsonObj["width"].toInt());
-        m_ui->sb_height->setValue(jsonObj["height"].toInt());
-    }
-    updateRect();
+QtNodes::ConnectionPolicy RectVarModel::portConnectionPolicy(QtNodes::PortType port,
+                                                             QtNodes::PortIndex port_index) const {
+    return QtNodes::ConnectionPolicy::Many;
 }
 
 void RectVarModel::updateRect() {
-    // update the m_rect, if inRectsData is expired take the values from the m_ui
-    const auto lockRectsData = m_inRectsData.lock();
-    if (lockRectsData) {
-        const auto rects = lockRectsData->rects();
-        if (rects.isEmpty()) {
-            return;
+    QList<QRect> rects;
+    // take all the inVRectsData and inRectData and create a new m_outRectsData
+    for (auto it = m_inVRectsDataMap.begin(); it != m_inVRectsDataMap.end(); ++it) {
+        if (const auto lock = it.value().lock()) {
+            rects.append(lock->rects());
         }
-        m_rect = rects.at(0);
-        // update the m_ui blocking the signals
-        if (m_ui) {
-            QSignalBlocker blockerX(m_ui->sb_x);
-            QSignalBlocker blockerY(m_ui->sb_y);
-            QSignalBlocker blockerWidth(m_ui->sb_width);
-            QSignalBlocker blockerHeight(m_ui->sb_height);
-            m_ui->sb_x->setValue(m_rect.x());
-            m_ui->sb_y->setValue(m_rect.y());
-            m_ui->sb_width->setValue(m_rect.width());
-            m_ui->sb_height->setValue(m_rect.height());
+    }
+    // take all the inRectData and append it to the list
+    for (auto it = m_inRectDataMap.begin(); it != m_inRectDataMap.end(); ++it) {
+        if (const auto lock = it.value().lock()) {
+            rects.append(lock->rect());
         }
-    } else if (m_ui) {
-        m_rect.setX(m_ui->sb_x->value());
-        m_rect.setY(m_ui->sb_y->value());
-        m_rect.setWidth(m_ui->sb_width->value());
-        m_rect.setHeight(m_ui->sb_height->value());
     }
-    // update the center
-    if (m_ui) {
-        m_ui->sb_center_x->setValue(m_rect.center().x());
-        m_ui->sb_center_y->setValue(m_rect.center().y());
+    m_outRectsDataList.clear();
+    m_outRectsData.reset();
+    if (!rects.isEmpty()) {
+        m_outRectsData = std::make_shared<RectsData>(rects);
+        for (const auto& rect: rects) {
+            m_outRectsDataList.append(std::make_shared<RectData>(rect));
+        }
     }
-    // update the out data
-    m_outRectsData = std::make_shared<RectsData>(QList{m_rect});
-    m_outCenterPointData = std::make_shared<PointData>(m_rect.center());
-    m_outTopLeftPointData = std::make_shared<PointData>(m_rect.topLeft());
-    m_outWidth = std::make_shared<VariantData>(m_rect.width());
-    m_outHeight = std::make_shared<VariantData>(m_rect.height());
-    m_outCenter = std::make_shared<PointData>(m_rect.center());
-    emit dataUpdated(0);
-    emit dataUpdated(1);
-    emit dataUpdated(2);
-    emit dataUpdated(3);
-    emit dataUpdated(4);
-    emit dataUpdated(5);
+    // debug the outRectsData count and the outRectsDataList count
+    qDebug() << "RectVarModel::updateRect outRectsData count: " << m_outRectsDataList.size();
+    qDebug() << "RectVarModel::updateRect outRectsDataList count: " << m_outRectsDataList.size();
+
+    // for each out node, emit dataUpdated
+    for (int i = 0; i < nPorts(QtNodes::PortType::Out); ++i) {
+        emit dataUpdated(i);
+    }
+}
+
+void RectVarModel::inputConnectionDeleted(QtNodes::ConnectionId const& connection_id) {
+    //qDebug() << "RectVarModel::inputConnectionDeleted connection_id in: " << connection_id.inNodeId;
+    //qDebug() << "RectVarModel::inputConnectionDeleted connection_id out: " << connection_id.outNodeId;
+    if (connection_id.inPortIndex == 0) {
+        m_inVRectsDataMap.remove(connection_id.outNodeId);
+    } else if (connection_id.inPortIndex == 1) {
+        m_inRectDataMap.remove(connection_id.outNodeId);
+    }
+}
+
+void RectVarModel::inputConnectionCreated(QtNodes::ConnectionId const& connection_id) {
+    //qDebug() << "RectVarModel::inputConnectionCreated IN nodeID: " << connection_id.inNodeId;
+    //qDebug() << "RectVarModel::inputConnectionCreated IN port index: " << connection_id.inPortIndex;
+    //qDebug() << "RectVarModel::inputConnectionCreated OUT nodeID: " << connection_id.outNodeId;
+    //qDebug() << "RectVarModel::inputConnectionCreated OUT port index: " << connection_id.outPortIndex;
+    //qDebug() << "----------";
+    // insert the outNodeID in the map m_inRectsData
+    // the inNodeId is the port of the current node, where the connection is created
+    if (connection_id.inPortIndex == 0) {
+        m_inVRectsDataMap.insert(connection_id.outNodeId, std::weak_ptr<RectsData>());
+    } else if (connection_id.inPortIndex == 1) {
+        m_inRectDataMap.insert(connection_id.outNodeId, std::weak_ptr<RectData>());
+    }
 }

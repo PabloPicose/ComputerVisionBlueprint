@@ -28,6 +28,7 @@
 #include "Nodes/Variables/SizeVarModel.h"
 #include "Nodes/Variables/FileVarModel.h"
 #include "Nodes/Variables/RectVarModel.h"
+#include "Nodes/Variables/RectModel.h"
 
 // DataOperations
 #include "Nodes/DataOperations/ScaleRects.h"
