@@ -44,6 +44,9 @@
 #include "Nodes/OpenCV/EqualizeHistModel.h"
 #include "Nodes/OpenCV/DetectMultiScaleModel.h"
 
+// video
+#include "Nodes/Video/CameraModel.h"
+
 // data
 #include "Nodes/Data/DataInclude.h"
 

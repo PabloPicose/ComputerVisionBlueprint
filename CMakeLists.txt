@@ -3,7 +3,7 @@ project(OpenCVNodeEditor)
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(Qt6 COMPONENTS Widgets Gui Concurrent REQUIRED)
+find_package(Qt6 COMPONENTS Widgets Gui Concurrent Multimedia REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -108,12 +108,16 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Variables/RectForm.ui
         src/Nodes/Images/CutImageModel.cpp
         src/Nodes/Images/CutImageModel.h
+        src/Nodes/Video/CameraModel.cpp
+        src/Nodes/Video/CameraModel.h
+        src/Nodes/Video/CameraForm.ui
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE
         QtNodes::QtNodes
         ${OpenCV_LIBS}
         Qt6::Concurrent
+        Qt6::Multimedia
 )
 
 target_include_directories(OpenCVNodeEditor PRIVATE src)
