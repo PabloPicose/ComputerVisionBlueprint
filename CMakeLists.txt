@@ -111,6 +111,8 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Video/CameraModel.cpp
         src/Nodes/Video/CameraModel.h
         src/Nodes/Video/CameraForm.ui
+        src/Nodes/Video/CaptureModel.cpp
+        src/Nodes/Video/CaptureModel.h
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE

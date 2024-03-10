@@ -56,6 +56,7 @@ private:
     QWidget* m_widget = nullptr;
     QScopedPointer<Ui::DrawLinesForm> m_ui;
     QFutureWatcher<QPair<QImage, quint64>> m_watcher;
+    bool m_processing = false;
 
     // in
     // 0
@@ -67,7 +68,7 @@ private:
     QColor m_lastColor;
     std::weak_ptr<VariantData> m_inColor;
     // 3
-    int m_lastThickness = 1;
+    int m_lastThickness = 10;
     std::weak_ptr<VariantData> m_inThickness;
 
     // out

@@ -8,6 +8,8 @@
 
 #include <QtConcurrent/QtConcurrent>
 
+int count = 0;
+
 DetectMultiScaleModel::DetectMultiScaleModel() {
     connect(&m_watcher, &QFutureWatcher<QPair<QList<QRect>, quint64>>::finished, this,
             &DetectMultiScaleModel::processFinished);
@@ -188,6 +190,7 @@ void DetectMultiScaleModel::processFinished() {
         m_ui->sb_time->setValue(time);
     }
     emit dataUpdated(0);
+    m_processing = false;
     requestProcess();
 }
 
@@ -215,7 +218,6 @@ QPair<QList<QRect>, quint64> DetectMultiScaleModel::processMultiScale(const QIma
     } catch (cv::Exception& e) {
         qDebug() << e.what();
     }
-    qDebug() << "Detected rects:" << qRects;
     return {qRects, timer.elapsed()};
 }
 
@@ -223,14 +225,18 @@ void DetectMultiScaleModel::requestProcess() {
     if (m_lastImageToProcess.isNull()) {
         return;
     }
-    if (m_watcher.isRunning()) {
+    if (m_processing) {
         return;
     }
     const auto lockCascade = m_inFileData.lock();
     if (!lockCascade) {
         return;
     }
-
+    count++;
+    if (count > 999999) {
+        count = 0;
+    }
+    m_processing = true;
     const cv::CascadeClassifier cc = *lockCascade->cascadeClassifier().get();
     const auto future = QtConcurrent::run(&DetectMultiScaleModel::processMultiScale,
                                           m_lastImageToProcess,

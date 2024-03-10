@@ -172,6 +172,7 @@ void ConvertImageToModel::processFinished() {
     }
     emit dataUpdated(0);
     emit dataUpdated(1);
+    m_processing = false;
     requestProcess();
 }
 
@@ -179,10 +180,11 @@ void ConvertImageToModel::requestProcess() {
     if (m_lastImageToProcess.isNull()) {
         return;
     }
-    if (m_watcher.isRunning()) {
+    if (m_processing) {
         return;
     }
     updateFlags();
+    m_processing = true;
 
     const auto future = QtConcurrent::run(processImage, m_lastImageToProcess,
                                           m_lastFormatToProcess, m_flags);

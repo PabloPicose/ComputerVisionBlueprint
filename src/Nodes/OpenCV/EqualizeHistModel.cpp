@@ -87,16 +87,18 @@ void EqualizeHistModel::processFinished() {
         emit dataUpdated(0);
     }
     m_widget->adjustSize();
+    m_processing = false;
     requestProcess();
 }
 
 void EqualizeHistModel::requestProcess() {
-    if (m_watcher.isRunning())
+    if (m_processing)
         return;
     if (m_lastImageToProcess.isNull())
         return;
     if (m_inImageData.expired())
         return;
+    m_processing = true;
 
     const auto future = QtConcurrent::run(equializeHist, m_lastImageToProcess);
     m_lastImageToProcess = QImage();

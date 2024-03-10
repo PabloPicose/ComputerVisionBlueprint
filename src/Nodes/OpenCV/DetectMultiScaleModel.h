@@ -61,6 +61,7 @@ private:
     QWidget* m_widget = nullptr;
     std::unique_ptr<Ui::DetectMultiScaleForm> m_ui;
     QFutureWatcher<QPair<QList<QRect>, quint64>> m_watcher;
+    bool m_processing = false;
 
     // in
     // 0

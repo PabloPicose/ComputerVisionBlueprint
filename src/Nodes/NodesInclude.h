@@ -46,6 +46,7 @@
 
 // video
 #include "Nodes/Video/CameraModel.h"
+#include "Nodes/Video/CaptureModel.h"
 
 // data
 #include "Nodes/Data/DataInclude.h"

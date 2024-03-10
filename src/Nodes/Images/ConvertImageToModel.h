@@ -69,6 +69,7 @@ private:
     std::unique_ptr<Ui::ConvertImageToForm> m_ui;
     QFutureWatcher<QPair<QImage, quint64>> m_watcher;
     QFlags<Qt::ImageConversionFlag> m_flags;
+    bool m_processing = false;
     // in
     // 0
     QImage m_lastImageToProcess;

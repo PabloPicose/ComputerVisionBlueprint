@@ -54,6 +54,7 @@ private:
     std::shared_ptr<ImageData> m_outImageData;
 
     QFutureWatcher<QPair<QImage, quint64>> m_watcher;
+    bool m_processing = false;
 };
 
 

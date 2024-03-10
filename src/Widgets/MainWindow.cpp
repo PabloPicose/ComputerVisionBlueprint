@@ -78,6 +78,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> MainWindow::registerDataMode
     ret->registerModel<RectModel>("Variables");
 
     ret->registerModel<CameraModel>("Video");
+    ret->registerModel<CaptureModel>("Video");
 
     ret->registerModel<ScaleRects>("Data Operations");
 

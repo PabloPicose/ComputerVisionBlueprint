@@ -198,9 +198,15 @@ void DrawRectsModel::requestProcess() {
     if (m_lastPixmapToProcess.isNull()) {
         return;
     }
-    const auto future = QtConcurrent::run(&DrawRectsModel::processImage, m_lastPixmapToProcess,
-                                          m_inRectsData.lock()->rects(), m_color, m_thickness);
+    /*const auto future = QtConcurrent::run(&DrawRectsModel::processImage, m_lastPixmapToProcess,
+                                          m_inRectsData.lock()->rects(), m_color, m_thickness); */
+    //m_watcher.setFuture(future);
+    const auto [fst, snd] =  processImage(m_lastPixmapToProcess, m_inRectsData.lock()->rects(), m_color, m_thickness);
+    if (m_ui) {
+        m_ui->sb_time->setValue(snd);
+    }
+    m_outImageData = std::make_shared<ImageData>(fst);
     m_lastPixmapToProcess = QImage();
-    m_watcher.setFuture(future);
 
+    emit dataUpdated(0);
 }

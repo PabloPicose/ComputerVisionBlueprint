@@ -130,6 +130,7 @@ void DrawLinesModel::processFinished() {
     m_ui->sb_time->setValue(snd);
 
     emit dataUpdated(0);
+    m_processing = false;
     requestProcess();
 }
 
@@ -140,12 +141,13 @@ void DrawLinesModel::requestProcess() {
     if (m_inLinesSegmentData.expired()) {
         return;
     }
-    if (m_watcher.isRunning()) {
+    if (m_processing) {
         return;
     }
     if (m_lastPixmapToProcess.isNull()) {
         return;
     }
+    m_processing = true;
     const auto future = QtConcurrent::run(&DrawLinesModel::processImage, m_lastPixmapToProcess,
                                           m_inLinesSegmentData.lock()->lines(), m_lastColor, m_lastThickness);
     m_lastPixmapToProcess = QImage();
