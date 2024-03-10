@@ -121,12 +121,55 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 <!-- ROADMAP -->
 ## Roadmap
+- [ ] AppImage for Linux (download and run)
 
-- [ ] Files from link 
+- [ ] Windows executable
+
+- [ ] MacOS executable
+
+- [ ] Documentation
+  - [ ] Specific how to build
+
+- [ ] User interface
+  - [ ] Dark mode
+  - [ ] Light mode
+  - [ ] Customizable theme
+  - [ ] Panel with nodes
+
+- [x] Image conversion formats
+
+- [x] Scale image
+
+- [ ] OpenCV 
+  - [x] Equalize Hist
+  - [x] Blur
+  - [x] Gaussian Blur
+  - [x] Canny
+  - [x] Cascade Classifier
+  - [ ] Median Blur
+  - [ ] Bilateral Filter
+  - [ ] Box Filter
+  - [ ] SQR Box Filter
+  - [ ] Filter2D
+  - [ ] Erode
+  - [ ] Dilate
+  - [ ] MorphologyEx
+  - [ ] Distance Transform
+  - [ ] Watershed
+  - [ ] Pyr Down
+
+- [ ] Files
+    - [x] From file
+    - [ ] From URL
 - [x] Input video
-    - [ ] Camera input
-    - [ ] Take screenshot from video to an image
+    - [x] Camera input
+    - [x] Take screenshot from video to an image
+
+- [ ] DLib integration
+    - [ ] Face landmarks
+
 - [ ] Draws 
+    - [x] Draw rectangles
     - [ ] Circles
 
 See the [open issues](https://github.com/PabloPicose/OpenCVNodeEditor/issues) for a full list of proposed features (and known issues).
