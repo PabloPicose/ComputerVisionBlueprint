@@ -24,7 +24,7 @@ unsigned ImageInfoModel::nPorts(QtNodes::PortType portType) const {
         case QtNodes::PortType::In:
             return 1;
         case QtNodes::PortType::Out:
-            return 6;
+            return 3;
         default:
             return 0;
             break;
@@ -40,14 +40,8 @@ QtNodes::NodeDataType ImageInfoModel::dataType(QtNodes::PortType portType, QtNod
                 case 0:
                     return ImageData().type();
                 case 1:
-                    return VariantData(false).type();
-                case 2:
                     return ImageFormatData().type();
-                case 3:
-                    return VariantData(false).type();
-                case 4:
-                    return VariantData(false).type();
-                case 5:
+                case 2:
                     return VariantData(QSize()).type();
                 default:
                     break;
@@ -75,14 +69,8 @@ std::shared_ptr<QtNodes::NodeData> ImageInfoModel::outData(const QtNodes::PortIn
         case 0:
             return m_outImageData;
         case 1:
-            return m_outIsNull;
-        case 2:
             return m_outFormat;
-        case 3:
-            return m_outIsGrayscale;
-        case 4:
-            return m_outHasAlpha;
-        case 5:
+        case 2:
             return m_outSize;
         default:
             return nullptr;
@@ -100,10 +88,7 @@ QWidget* ImageInfoModel::embeddedWidget() {
 
 void ImageInfoModel::invalidateOutData() {
     m_outImageData.reset();
-    m_outIsNull.reset();
     m_outFormat.reset();
-    m_outIsGrayscale.reset();
-    m_outHasAlpha.reset();
     m_outSize.reset();
 }
 
@@ -113,24 +98,18 @@ void ImageInfoModel::updateData() {
         invalidateOutData();
     } else {
         m_outImageData = std::make_shared<ImageData>(imageLock->image());
-        m_outIsNull = std::make_shared<VariantData>(imageLock->image().isNull());
         m_outFormat = std::make_shared<ImageFormatData>(imageLock->image().format());
-        m_outIsGrayscale = std::make_shared<VariantData>(imageLock->image().isGrayscale());
-        m_outHasAlpha = std::make_shared<VariantData>(imageLock->image().hasAlphaChannel());
         m_outSize = std::make_shared<VariantData>(imageLock->image().size());
         if (m_ui) {
-            m_ui->cb_isNull->setChecked(m_outIsNull->variant().toBool());
-            m_ui->cb_isGrayScale->setChecked(m_outIsGrayscale->variant().toBool());
-            m_ui->cb_hasAlpha->setChecked(m_outHasAlpha->variant().toBool());
+            m_ui->cb_isNull->setChecked(imageLock->isNull());
+            m_ui->cb_isGrayScale->setChecked(imageLock->isGrayScale());
+            m_ui->cb_hasAlpha->setChecked(imageLock->hasAlphaChannel());
             m_ui->le_format->setText(formatToString(m_outFormat->format()));
         }
     }
     emit dataUpdated(0);
     emit dataUpdated(1);
     emit dataUpdated(2);
-    emit dataUpdated(3);
-    emit dataUpdated(4);
-    emit dataUpdated(5);
 }
 
 QString ImageInfoModel::formatToString(QImage::Format const format) {

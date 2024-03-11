@@ -12,6 +12,7 @@ namespace QtNodes {
     class DataFlowGraphicsScene;
     class DataFlowGraphModel;
     class NodeDelegateModelRegistry;
+    class UndoStack;
 }
 
 QT_BEGIN_NAMESPACE
@@ -30,18 +31,23 @@ public:
 
     ~MainWindow() override;
 
+protected:
+    void mouseMoveEvent(QMouseEvent* event) override;
+
 private slots:
     void onActionSaveTriggered();
 
     void onActionLoadTriggered();
 
 private:
-    static std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registerDataModels();
+    std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registerDataModels();
 
 private:
     Ui::MainWindow* ui;
     QtNodes::DataFlowGraphModel* m_model = nullptr;
     QtNodes::DataFlowGraphicsScene* m_scene = nullptr;
+
+    QMap<QString, QStringList> m_mapGroupNames;
 };
 
 

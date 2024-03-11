@@ -6,30 +6,44 @@
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include <QMouseEvent>
 
 #include <QtNodes/DataFlowGraphicsScene>
 #include <QtNodes/DataFlowGraphModel>
 #include "Nodes/NodesInclude.h"
+#include "UndoCommands.hpp"
 
 #include <QtNodes/GraphicsView>
 
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
+    const auto registers = registerDataModels();
+    ui->tw_nodes->fillTreeWidget(registers);
 
-    m_model = new QtNodes::DataFlowGraphModel(registerDataModels());
+    m_model = new QtNodes::DataFlowGraphModel(registers);
     m_scene = new QtNodes::DataFlowGraphicsScene(*m_model);
     m_model->setParent(m_scene);
 
+    ui->nodes_graphicsView->setMapGroupNames(ui->tw_nodes->getMapGroupNames());
+    ui->nodes_graphicsView->setDataFlowScene(m_scene);
     ui->nodes_graphicsView->setScene(m_scene);
 
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::onActionSaveTriggered);
     connect(ui->actionLoad, &QAction::triggered, this, &MainWindow::onActionLoadTriggered);
+
+    //setMouseTracking(true);
+    //placeNodeInScene("NumberSource", QPointF(881,455));/
 }
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent* event) {
+    QMainWindow::mouseMoveEvent(event);
+    // print the mouse position
+    // qDebug() << event->pos();
 }
 
 void MainWindow::onActionSaveTriggered() {
@@ -41,7 +55,7 @@ void MainWindow::onActionLoadTriggered() {
 }
 
 std::shared_ptr<QtNodes::NodeDelegateModelRegistry> MainWindow::registerDataModels() {
-        auto ret = std::make_shared<QtNodes::NodeDelegateModelRegistry>();
+    auto ret = std::make_shared<QtNodes::NodeDelegateModelRegistry>();
     ret->registerModel<PiModel>("Constants");
 
     ret->registerModel<NumberSourceDataModel>("Sources");

@@ -113,6 +113,10 @@ add_executable(OpenCVNodeEditor
         src/Nodes/Video/CameraForm.ui
         src/Nodes/Video/CaptureModel.cpp
         src/Nodes/Video/CaptureModel.h
+        src/CustomWidget/DragableTreeOfNodes.cpp
+        src/CustomWidget/DragableTreeOfNodes.h
+        src/CustomWidget/DropGraphicsView.cpp
+        src/CustomWidget/DropGraphicsView.h
 )
 
 target_link_libraries(OpenCVNodeEditor PRIVATE
@@ -123,6 +127,8 @@ target_link_libraries(OpenCVNodeEditor PRIVATE
 )
 
 target_include_directories(OpenCVNodeEditor PRIVATE src)
+target_include_directories(OpenCVNodeEditor PRIVATE 3rdparty/nodeeditor/src)
+target_include_directories(OpenCVNodeEditor PRIVATE 3rdparty/nodeeditor/include/QtNodes/internal)
 
 # cmake install with appimage
 # inside the install directory we need to create bin, lib and share

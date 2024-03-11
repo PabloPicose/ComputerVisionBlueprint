@@ -52,14 +52,8 @@ private:
     // 0
     std::shared_ptr<ImageData> m_outImageData;
     // 1
-    std::shared_ptr<VariantData> m_outIsNull;
-    // 2
     std::shared_ptr<ImageFormatData> m_outFormat;
-    // 3
-    std::shared_ptr<VariantData> m_outIsGrayscale;
-    // 4
-    std::shared_ptr<VariantData> m_outHasAlpha;
-    // 5
+    // 2
     std::shared_ptr<VariantData> m_outSize;
 };
 

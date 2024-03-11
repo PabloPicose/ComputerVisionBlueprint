@@ -24,6 +24,10 @@ public:
 
     bool isNull() const { return m_image.isNull(); }
 
+    bool isGrayScale() const { return m_image.isGrayscale(); }
+
+    bool hasAlphaChannel() const { return m_image.hasAlphaChannel(); }
+
     QImage image() const { return m_image; }
 
     QPixmap pixmap() const { return QPixmap::fromImage(m_image); }
