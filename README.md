@@ -23,7 +23,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/PabloPicose/OpenCVNodeEditor">
+  <a href="https://github.com/PabloPicose/ComputerVisionBlueprint">
     <img src="resources/images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -44,17 +44,17 @@ The Computer Vision Blueprint project is an innovative open-source tool designed
 
 ## Key Features
 
-- **Graphical Node-Based Editor**: At the heart of OpenCVNodeEditor is a visually intuitive node editor that allows users to create, connect, and configure a series of processing steps in an easy-to-understand graphical format. This approach demystifies complex image processing workflows, making them accessible to both novices and experienced professionals alike.
+- **Graphical Node-Based Editor**: At the heart of ComputerVisionBlueprint is a visually intuitive node editor that allows users to create, connect, and configure a series of processing steps in an easy-to-understand graphical format. This approach demystifies complex image processing workflows, making them accessible to both novices and experienced professionals alike.
 
 - **Extensive OpenCV Integration**: The project fully harnesses the capabilities of OpenCV, one of the most robust and versatile libraries for computer vision and image processing. Users can apply various operations such as face detection, image filtering, color conversion, and much more, directly within the node editor interface.
 
-- **Custom Node Development**: Users are not limited to predefined nodes. The OpenCVNodeEditor platform supports the creation of custom nodes, enabling the addition of unique image processing functionalities tailored to specific project needs.
+- **Custom Node Development**: Users are not limited to predefined nodes. The ComputerVisionBlueprint platform supports the creation of custom nodes, enabling the addition of unique image processing functionalities tailored to specific project needs.
 
 - **Cross-Platform Compatibility**: Thanks to Qt 6, the project is designed to be cross-platform, supporting various operating systems including Windows, macOS, and Linux. This ensures that a wide range of users can access and benefit from the tool, regardless of their preferred development environment.
 
 ## Motivation
 
-The motivation behind OpenCVNodeEditor was to address the steep learning curve associated with image processing and computer vision applications. By providing a graphical interface for constructing and visualizing workflows, the project aims to lower the barrier to entry, fostering innovation and experimentation in fields ranging from academic research to industry-specific applications.
+The motivation behind ComputerVisionBlueprint was to address the steep learning curve associated with image processing and computer vision applications. By providing a graphical interface for constructing and visualizing workflows, the project aims to lower the barrier to entry, fostering innovation and experimentation in fields ranging from academic research to industry-specific applications.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -64,7 +64,7 @@ The motivation behind OpenCVNodeEditor was to address the steep learning curve a
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This section guides you through the initial setup and building of the OpenCVNodeEditor project. The project leverages Qt (version 6+), CMake for building, and requires OpenCV as a dependency. It also integrates the [NodeEditor](https://github.com/paceholder/nodeeditor) for graphical node-based editing.
+This section guides you through the initial setup and building of the ComputerVisionBlueprint project. The project leverages Qt (version 6+), CMake for building, and requires OpenCV as a dependency. It also integrates the [NodeEditor](https://github.com/paceholder/nodeeditor) for graphical node-based editing.
 
 ### Prerequisites
 
@@ -75,12 +75,12 @@ Before you begin, ensure you have the following installed on your system:
 
 ### Setup
 
-1. **Clone the OpenCVNodeEditor Repository**
+1. **Clone the ComputerVisionBlueprint Repository**
 
-   First, clone the OpenCVNodeEditor repository to your local machine using Git:
+   First, clone the ComputerVisionBlueprint repository to your local machine using Git:
 
    ```bash
-   git clone https://github.com/yourgithubusername/OpenCVNodeEditor.git
+   git clone https://github.com/yourgithubusername/ComputerVisionBlueprint.git
    cd ComputerVisionBlueprint
    mkdir 3rdparty
     ```
@@ -98,21 +98,21 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 1. **Convert color**
     In this example we will use the "Convert color" node to convert an image from BGR to Grayscale. The node has two input ports, one for the image and another for the conversion code. The output port will be the converted image. We will use the conversion code "Grayscale8"
-    ![](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/gif/convert_color.gif)
+    ![](https://github.com/PabloPicose/ComputerVisionBlueprint/blob/main/resources/gif/convert_color.gif)
 
 2. **Scale image**
     In this example we will use the "Scale" node to resize an image. The node has two input ports, one for the image and another for the scale factor. The output port will be the resized image. We will scale the image by a factor of 0.15
-    ![](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/gif/scale.gif)
+    ![](https://github.com/PabloPicose/ComputerVisionBlueprint/blob/main/resources/gif/scale.gif)
 
 3. **Detect faces**
     In this example we will use the "Detect multiscale" node to detect faces in an image. First we will use the Equalize Hist node to convert the image to an image with better contrast. Then with the "File" node we will load the cascade file and create the CascadeClassifier. Finally we will use the "Detect multiscale" node to detect the faces in the image. The output is a list of rectangles that represent the faces. Then we can simply draw the rectangles in the resized image (the equalized image or the scaled).
     
      We will use the cascade file "haarcascade_frontalface_alt.xml" that can be found in the [OpenCV repository frontal face alt](https://github.com/opencv/opencv/blob/4.x/data/haarcascades/haarcascade_frontalface_alt.xml) link.
-    ![](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/gif/detect_multiscale.gif)
+    ![](https://github.com/PabloPicose/ComputerVisionBlueprint/blob/main/resources/gif/detect_multiscale.gif)
 
 4. **Detect faces on original**
    We will scale the Rectangles x 15 and draw them on the original image
-    ![](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/gif/detect_multiscale_on_original.gif)
+    ![](https://github.com/PabloPicose/ComputerVisionBlueprint/blob/main/resources/gif/detect_multiscale_on_original.gif)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -172,7 +172,7 @@ Use this space to show useful examples of how a project can be used. Additional 
     - [x] Draw rectangles
     - [ ] Circles
 
-See the [open issues](https://github.com/PabloPicose/OpenCVNodeEditor/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/PabloPicose/ComputerVisionBlueprint/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
