@@ -2,29 +2,29 @@
 // Created by pablo on 3/11/24.
 //
 
-#include "PyrDown.h"
+#include "PyrUp.h"
 #include <QSpinBox>
 #include <QHBoxLayout>
 #include <QLabel>
 #include "Nodes/Conversor/MatQt.h"
 #include <QtConcurrent/QtConcurrent>
 
-PyrDown::PyrDown() {
-    connect(&m_watcher, &QFutureWatcher<QPair<quint64, QImage>>::finished, this, &PyrDown::processFinished);
+PyrUp::PyrUp() {
+    connect(&m_watcher, &QFutureWatcher<QPair<quint64, QImage>>::finished, this, &PyrUp::processFinished);
 }
 
-PyrDown::~PyrDown() {
+PyrUp::~PyrUp() {
 }
 
-QString PyrDown::caption() const {
-    return QStringLiteral("Pyr Down");
+QString PyrUp::caption() const {
+    return QStringLiteral("Pyr Up");
 }
 
-QString PyrDown::name() const {
-    return QStringLiteral("Pyr Down");
+QString PyrUp::name() const {
+    return QStringLiteral("Pyr Up");
 }
 
-unsigned PyrDown::nPorts(QtNodes::PortType portType) const {
+unsigned PyrUp::nPorts(QtNodes::PortType portType) const {
     switch (portType) {
         case QtNodes::PortType::In:
             return 2;
@@ -35,8 +35,8 @@ unsigned PyrDown::nPorts(QtNodes::PortType portType) const {
     }
 }
 
-QtNodes::NodeDataType PyrDown::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const {
-    switch (portType) {
+QtNodes::NodeDataType PyrUp::dataType(QtNodes::PortType portType, QtNodes::PortIndex portIndex) const {
+     switch (portType) {
         case QtNodes::PortType::In:
             if (portIndex == 0) {
                 return ImageData().type();
@@ -50,7 +50,7 @@ QtNodes::NodeDataType PyrDown::dataType(QtNodes::PortType portType, QtNodes::Por
     }
 }
 
-void PyrDown::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNodes::PortIndex portIndex) {
+void PyrUp::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNodes::PortIndex portIndex) {
     switch (portIndex) {
         case 0:
             m_inImageData = std::dynamic_pointer_cast<ImageData>(nodeData);
@@ -72,11 +72,11 @@ void PyrDown::setInData(std::shared_ptr<QtNodes::NodeData> nodeData, const QtNod
     requestProcess();
 }
 
-std::shared_ptr<QtNodes::NodeData> PyrDown::outData(const QtNodes::PortIndex port) {
+std::shared_ptr<QtNodes::NodeData> PyrUp::outData(const QtNodes::PortIndex port) {
     return m_outImageData;
 }
 
-QWidget* PyrDown::embeddedWidget() {
+QWidget* PyrUp::embeddedWidget() {
     if (!m_widget) {
         // Create inside the widget a horizontal layout with a label "Time ms:" and a spin box
         m_widget = new QWidget();
@@ -92,11 +92,11 @@ QWidget* PyrDown::embeddedWidget() {
     return m_widget;
 }
 
-bool PyrDown::portCaptionVisible(QtNodes::PortType port, QtNodes::PortIndex port_index) const {
+bool PyrUp::portCaptionVisible(QtNodes::PortType port, QtNodes::PortIndex port_index) const {
     return true;
 }
 
-QString PyrDown::portCaption(QtNodes::PortType port, QtNodes::PortIndex port_index) const {
+QString PyrUp::portCaption(QtNodes::PortType port, QtNodes::PortIndex port_index) const {
     switch (port) {
         case QtNodes::PortType::In:
             if (port_index == 0) {
@@ -111,7 +111,7 @@ QString PyrDown::portCaption(QtNodes::PortType port, QtNodes::PortIndex port_ind
     }
 }
 
-QPair<quint64, QImage> PyrDown::processImage(const QImage& image, const QSize& size) {
+QPair<quint64, QImage> PyrUp::processImage(const QImage& image, const QSize& size) {
     QElapsedTimer timer;
     timer.start();
     const cv::Mat src = QImageToMat(image);
@@ -119,10 +119,10 @@ QPair<quint64, QImage> PyrDown::processImage(const QImage& image, const QSize& s
     try {
         cv::Mat dst;
         if (size.isEmpty()) {
-            cv::pyrDown(src, dst);
+            cv::pyrUp(src, dst);
         } else {
             const cv::Size cvSize(src.cols / size.width(), src.rows / size.height());
-            cv::pyrDown(src, dst, cvSize);
+            cv::pyrUp(src, dst, cvSize);
         }
         result = MatToQImage(dst);
     } catch (cv::Exception& e) {
@@ -132,8 +132,8 @@ QPair<quint64, QImage> PyrDown::processImage(const QImage& image, const QSize& s
     return {static_cast<quint64>(timer.elapsed()), result};
 }
 
-void PyrDown::requestProcess() {
-    if (m_processing) {
+void PyrUp::requestProcess() {
+if (m_processing) {
         return;
     }
     const auto lockImage = m_inImageData.lock();
@@ -148,7 +148,7 @@ void PyrDown::requestProcess() {
     m_watcher.setFuture(future);
 }
 
-void PyrDown::processFinished() {
+void PyrUp::processFinished() {
     m_processing = false;
     const auto [time, image] = m_watcher.result();
     m_spinBox->setValue(static_cast<int>(time));

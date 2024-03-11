@@ -152,9 +152,9 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Gaussian Blur
   - [x] Canny
   - [x] Cascade Classifier
-  - [ ] Pyramids
-    - [ ] Pyr Up
-    - [ ] Pyr Down
+  - [x] Pyramids
+    - [x] Pyr Up
+    - [x] Pyr Down
   - [ ] Median Blur
   - [ ] Bilateral Filter
   - [ ] Box Filter
@@ -165,7 +165,6 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [ ] MorphologyEx
   - [ ] Distance Transform
   - [ ] Watershed
-  - [ ] Pyr Down
 
 - [ ] Files
     - [x] From file

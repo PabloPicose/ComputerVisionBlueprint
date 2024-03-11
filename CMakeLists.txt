@@ -119,6 +119,8 @@ add_executable(ComputerVisionBlueprint
         src/CustomWidget/DropGraphicsView.h
         src/Nodes/OpenCV/PyrDown.cpp
         src/Nodes/OpenCV/PyrDown.h
+        src/Nodes/OpenCV/PyrUp.cpp
+        src/Nodes/OpenCV/PyrUp.h
 )
 
 target_link_libraries(ComputerVisionBlueprint PRIVATE
