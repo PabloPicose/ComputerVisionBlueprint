@@ -42,6 +42,8 @@
 
 The Computer Vision Blueprint project is an innovative open-source tool designed to simplify the process of image analysis and manipulation using OpenCV through a user-friendly graphical node editor interface. This project leverages the power of Qt 6 for its GUI components, CMake for building and compiling, and integrates OpenCV for comprehensive image processing functionalities.
 
+This project is intended to use the same nomenclature as OpenCV, DLib, and other libraries to make it easier for users to understand and use the nodes then in their own projects.
+
 ## Key Features
 
 - **Graphical Node-Based Editor**: At the heart of ComputerVisionBlueprint is a visually intuitive node editor that allows users to create, connect, and configure a series of processing steps in an easy-to-understand graphical format. This approach demystifies complex image processing workflows, making them accessible to both novices and experienced professionals alike.
@@ -135,6 +137,10 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [ ] Light mode
   - [ ] Customizable theme
   - [x] Drag and drop nodes
+  - [ ] Internationalization
+    - [ ] Spanish
+  - [ ] Save and load workflows
+  - [ ] Help widget
 
 - [x] Image conversion formats
 
@@ -146,6 +152,9 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Gaussian Blur
   - [x] Canny
   - [x] Cascade Classifier
+  - [ ] Pyramids
+    - [ ] Pyr Up
+    - [ ] Pyr Down
   - [ ] Median Blur
   - [ ] Bilateral Filter
   - [ ] Box Filter
