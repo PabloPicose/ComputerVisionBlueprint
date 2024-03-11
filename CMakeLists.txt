@@ -117,6 +117,8 @@ add_executable(ComputerVisionBlueprint
         src/CustomWidget/DragableTreeOfNodes.h
         src/CustomWidget/DropGraphicsView.cpp
         src/CustomWidget/DropGraphicsView.h
+        src/Nodes/OpenCV/PyrDown.cpp
+        src/Nodes/OpenCV/PyrDown.h
 )
 
 target_link_libraries(ComputerVisionBlueprint PRIVATE

@@ -43,6 +43,7 @@
 #include "Nodes/OpenCV/CascadeClassifierModel.h"
 #include "Nodes/OpenCV/EqualizeHistModel.h"
 #include "Nodes/OpenCV/DetectMultiScaleModel.h"
+#include "Nodes/OpenCV/PyrDown.h"
 
 // video
 #include "Nodes/Video/CameraModel.h"

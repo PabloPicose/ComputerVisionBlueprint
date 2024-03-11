@@ -1,26 +1,25 @@
 //
-// Created by pablo on 3/5/24.
+// Created by pablo on 3/11/24.
 //
 
-#ifndef SCALEIMAGEMODEL_H
-#define SCALEIMAGEMODEL_H
+#ifndef PYRDOWN_H
+#define PYRDOWN_H
 
 
 #include <QtNodes/NodeDelegateModel>
+#include <QFutureWatcher>
 #include "Nodes/Data/ImageData.h"
 #include "Nodes/Data/VariantData.h"
 
-namespace Ui {
-    class ScaleImageForm;
-}
+class QSpinBox;
 
-class ScaleImageModel final : public QtNodes::NodeDelegateModel {
+class PyrDown final : public QtNodes::NodeDelegateModel {
     Q_OBJECT
 
 public:
-    ScaleImageModel();
+    PyrDown();
 
-    ~ScaleImageModel() override;
+    ~PyrDown() override;
 
     QString caption() const override;
 
@@ -35,23 +34,33 @@ public:
     std::shared_ptr<QtNodes::NodeData> outData(const QtNodes::PortIndex port) override;
 
     QWidget* embeddedWidget() override;
-private:
-    static QPair<QImage, quint64> processImage(const QImage& image, const QSize& scaleFactor, Qt::AspectRatioMode mode);
 
+    bool portCaptionVisible(QtNodes::PortType, QtNodes::PortIndex) const override;
+
+    QString portCaption(QtNodes::PortType, QtNodes::PortIndex) const override;
+
+private:
+    static QPair<quint64, QImage> processImage(const QImage& image, const QSize& size);
+
+private slots:
     void requestProcess();
+
+    void processFinished();
+
 private:
     QWidget* m_widget = nullptr;
-    QScopedPointer<Ui::ScaleImageForm> m_ui;
-
+    QSpinBox* m_spinBox = nullptr;
     // in
     // 0
     std::weak_ptr<ImageData> m_inImageData;
+    QImage m_lastImageToProcess;
     // 1
-    std::weak_ptr<VariantData> m_inScaleFactor;
+    std::weak_ptr<VariantData> m_inSizeData;
     // out
-    // 0
     std::shared_ptr<ImageData> m_outImageData;
+    QFutureWatcher<QPair<quint64, QImage>> m_watcher;
+    bool m_processing = false;
 };
 
 
-#endif //SCALEIMAGEMODEL_H
+#endif //PYRDOWN_H

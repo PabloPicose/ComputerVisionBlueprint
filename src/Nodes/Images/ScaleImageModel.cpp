@@ -73,14 +73,16 @@ QWidget* ScaleImageModel::embeddedWidget() {
         m_ui.reset(new Ui::ScaleImageForm);
         m_widget = new QWidget();
         m_ui->setupUi(m_widget);
+        // connect combobox cb_aspectRatio to requestProcess
+        connect(m_ui->cb_aspectRatio, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ScaleImageModel::requestProcess);
     }
     return m_widget;
 }
 
-QPair<QImage, quint64> ScaleImageModel::processImage(const QImage& image, const QSize& scaleFactor) {
+QPair<QImage, quint64> ScaleImageModel::processImage(const QImage& image, const QSize& scaleFactor, Qt::AspectRatioMode mode) {
     QElapsedTimer timer;
     timer.start();
-    const auto scaledImage = image.scaled(scaleFactor, Qt::KeepAspectRatio);
+    const auto scaledImage = image.scaled(scaleFactor, mode);
     return {scaledImage, static_cast<quint64>(timer.elapsed())};
 }
 
@@ -94,7 +96,9 @@ void ScaleImageModel::requestProcess() {
             m_outImageData.reset();
             return;
         }
-        const auto [fst, snd] = processImage(image, scaleFactor);
+        // get aspect ratio mode from the current index of the combobox
+        const auto mode = static_cast<Qt::AspectRatioMode>(m_ui->cb_aspectRatio->currentIndex());
+        const auto [fst, snd] = processImage(image, scaleFactor, mode);
         m_outImageData = std::make_shared<ImageData>(fst);
         if (m_ui) {
             m_ui->sb_time->setValue(snd);

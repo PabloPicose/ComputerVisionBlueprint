@@ -82,6 +82,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> MainWindow::registerDataMode
     ret->registerModel<GaussianBlurModel>("OpenCV");
     ret->registerModel<HoughLinesPModel>("OpenCV");
     ret->registerModel<EqualizeHistModel>("OpenCV");
+    ret->registerModel<PyrDown>("OpenCV");
 
     ret->registerModel<CascadeClassifier>("CascadeClassifier");
     ret->registerModel<DetectMultiScaleModel>("CascadeClassifier");
