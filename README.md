@@ -134,7 +134,7 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [ ] Dark mode
   - [ ] Light mode
   - [ ] Customizable theme
-  - [ ] Panel with nodes
+  - [x] Drag and drop nodes
 
 - [x] Image conversion formats
 
