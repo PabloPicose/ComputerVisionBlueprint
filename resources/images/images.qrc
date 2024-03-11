@@ -1,5 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
     <qresource prefix="/images">
-        <file alias="logo.png">opencvnodeeditor_logo.png</file>
+        <file alias="logo.png">OpenCVNodeEditor.png</file>
     </qresource>
 </RCC>

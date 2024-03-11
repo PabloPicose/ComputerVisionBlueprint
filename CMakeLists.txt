@@ -123,3 +123,11 @@ target_link_libraries(OpenCVNodeEditor PRIVATE
 )
 
 target_include_directories(OpenCVNodeEditor PRIVATE src)
+
+# cmake install with appimage
+# inside the install directory we need to create bin, lib and share
+# inside the share directory we need to create the applications directory with a empty file called OpenCVNodeEditor.desktop
+# the headers are not required to be installed
+install(TARGETS OpenCVNodeEditor RUNTIME DESTINATION usr/bin)
+install(FILES resources/appimage/OpenCVNodeEditor.desktop DESTINATION usr/share/applications)
+install(FILES resources/images/OpenCVNodeEditor.png DESTINATION usr/share/icons/hicolor/scalable/apps/)
