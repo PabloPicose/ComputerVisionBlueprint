@@ -14,7 +14,7 @@ find_package(OpenCV CONFIG REQUIRED)
 
 add_subdirectory(3rdparty/nodeeditor)
 
-add_executable(OpenCVNodeEditor
+add_executable(ComputerVisionBlueprint
         resources/images/images.qrc
         src/main.cpp
         #src/Nodes/OpenCV/FacialDetectorModel.cpp
@@ -119,21 +119,13 @@ add_executable(OpenCVNodeEditor
         src/CustomWidget/DropGraphicsView.h
 )
 
-target_link_libraries(OpenCVNodeEditor PRIVATE
+target_link_libraries(ComputerVisionBlueprint PRIVATE
         QtNodes::QtNodes
         ${OpenCV_LIBS}
         Qt6::Concurrent
         Qt6::Multimedia
 )
 
-target_include_directories(OpenCVNodeEditor PRIVATE src)
-target_include_directories(OpenCVNodeEditor PRIVATE 3rdparty/nodeeditor/src)
-target_include_directories(OpenCVNodeEditor PRIVATE 3rdparty/nodeeditor/include/QtNodes/internal)
-
-# cmake install with appimage
-# inside the install directory we need to create bin, lib and share
-# inside the share directory we need to create the applications directory with a empty file called OpenCVNodeEditor.desktop
-# the headers are not required to be installed
-install(TARGETS OpenCVNodeEditor RUNTIME DESTINATION usr/bin)
-install(FILES resources/appimage/OpenCVNodeEditor.desktop DESTINATION usr/share/applications)
-install(FILES resources/images/OpenCVNodeEditor.png DESTINATION usr/share/icons/hicolor/scalable/apps/)
+target_include_directories(ComputerVisionBlueprint PRIVATE src)
+target_include_directories(ComputerVisionBlueprint PRIVATE 3rdparty/nodeeditor/src)
+target_include_directories(ComputerVisionBlueprint PRIVATE 3rdparty/nodeeditor/include/QtNodes/internal)

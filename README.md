@@ -24,13 +24,13 @@
 <br />
 <div align="center">
   <a href="https://github.com/PabloPicose/OpenCVNodeEditor">
-    <img src="resources/images/opencvnodeeditor_logo.png" alt="Logo" width="80" height="80">
+    <img src="resources/images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">OpenCV Node Editor</h3>
+<h3 align="center">Computer Vision Blueprint</h3>
 
   <p align="center">
-    OpenCV Node Editor is an innovative open-source tool designed to simplify the process of image analysis and manipulation using OpenCV through a user-friendly graphical node editor interface.
+    Computer Vision Blueprint is an innovative open-source tool designed to simplify the process of image analysis and manipulation using OpenCV through a user-friendly graphical node editor interface.
   </p>
 </div>
 
@@ -38,9 +38,9 @@
 <!-- ABOUT THE PROJECT -->
 # About the Project
 
-[![Product Name Screen Shot][product-screenshot]](https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/resources/images/preview.png)
+[![Product Name Screen Shot][product-screenshot]](https://github.com/PabloPicose/ComputerVisionBlueprint/blob/main/resources/images/preview.png)
 
-The OpenCVNodeEditor project is an innovative open-source tool designed to simplify the process of image analysis and manipulation using OpenCV through a user-friendly graphical node editor interface. This project leverages the power of Qt 6 for its GUI components, CMake for building and compiling, and integrates OpenCV for comprehensive image processing functionalities.
+The Computer Vision Blueprint project is an innovative open-source tool designed to simplify the process of image analysis and manipulation using OpenCV through a user-friendly graphical node editor interface. This project leverages the power of Qt 6 for its GUI components, CMake for building and compiling, and integrates OpenCV for comprehensive image processing functionalities.
 
 ## Key Features
 
@@ -81,7 +81,7 @@ Before you begin, ensure you have the following installed on your system:
 
    ```bash
    git clone https://github.com/yourgithubusername/OpenCVNodeEditor.git
-   cd OpenCVNodeEditor
+   cd ComputerVisionBlueprint
    mkdir 3rdparty
     ```
    Clone the NodeEditor repository from GitHub into the 3rdparty directory you just created
@@ -217,7 +217,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/PabloPicose/OpenCVNodeEditor/issues
+[issues-url]: https://github.com/PabloPicose/ComputerVisionBlueprint/issues
 [license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/PabloPicose/OpenCVNodeEditor/blob/main/LICENSE
+[license-url]: https://github.com/PabloPicose/ComputerVisionBlueprint/blob/main/LICENSE
 [product-screenshot]: resources/images/preview.png
