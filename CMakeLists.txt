@@ -3,7 +3,7 @@ project(OpenCVNodeEditor)
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(Qt6 COMPONENTS Widgets Gui Concurrent Multimedia REQUIRED)
+find_package(Qt6 COMPONENTS Widgets Gui Concurrent Multimedia Network REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -121,6 +121,9 @@ add_executable(ComputerVisionBlueprint
         src/Nodes/OpenCV/PyrDown.h
         src/Nodes/OpenCV/PyrUp.cpp
         src/Nodes/OpenCV/PyrUp.h
+        src/Nodes/Variables/FileFromUrlModel.cpp
+        src/Nodes/Variables/FileFromUrlModel.h
+        src/Nodes/Variables/FileFromUrlForm.ui
 )
 
 target_link_libraries(ComputerVisionBlueprint PRIVATE
@@ -128,6 +131,7 @@ target_link_libraries(ComputerVisionBlueprint PRIVATE
         ${OpenCV_LIBS}
         Qt6::Concurrent
         Qt6::Multimedia
+        Qt6::Network
 )
 
 target_include_directories(ComputerVisionBlueprint PRIVATE src)

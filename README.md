@@ -168,6 +168,9 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 - [ ] Files
     - [x] From file
+    - [x] From URL
+- [ ] Video
+    - [ ] From file
     - [ ] From URL
 - [x] Input video
     - [x] Camera input

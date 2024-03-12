@@ -7,16 +7,37 @@
 
 #include <QtNodes/NodeData>
 
-#include <QFile>
+#include <QTemporaryFile>
 
 class FileData final : public QtNodes::NodeData {
 public:
-    FileData() = default;
-
-    explicit FileData(const QString &filename) : m_file(filename) {
+    FileData() {
+        m_file.setAutoRemove(true);
     }
 
-    explicit FileData(const QFile& file) : m_file(file.fileName()) {
+    explicit FileData(const QString &filename) {
+        // if the file exists, load the content into the temp file
+        if (QFile::exists(filename)) {
+            m_file.open();
+            QFile file(filename);
+            file.open(QIODevice::ReadOnly);
+            m_file.write(file.readAll());
+            file.close();
+            m_file.close();
+        }
+    }
+
+    void setData(const QString &data) {
+        m_file.setAutoRemove(true);
+        m_file.open();
+        m_file.write(data.toUtf8());
+        m_file.close();
+    }
+
+    void setData(const QByteArray &data) {
+        m_file.open();
+        m_file.write(data);
+        m_file.close();
     }
 
     QtNodes::NodeDataType type() const override {
@@ -32,7 +53,7 @@ public:
     }
 
 private:
-    QFile m_file;
+    QTemporaryFile m_file;
 };
 
 #endif //FILEDATA_H

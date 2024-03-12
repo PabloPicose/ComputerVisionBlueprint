@@ -28,6 +28,7 @@
 // Variables
 #include "Nodes/Variables/SizeVarModel.h"
 #include "Nodes/Variables/FileVarModel.h"
+#include "Nodes/Variables/FileFromUrlModel.h"
 #include "Nodes/Variables/RectVarModel.h"
 #include "Nodes/Variables/RectModel.h"
 
