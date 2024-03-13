@@ -1,7 +1,6 @@
 3rdparty/
 .conan*/
 cmake-build*/
-.idea/
 .vscode/
 CMakeUserPresets.json
 linuxdeploy*
