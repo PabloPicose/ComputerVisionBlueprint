@@ -4,3 +4,16 @@ opencv/4.8.1
 [generators]
 CMakeDeps
 CMakeToolchain
+
+[options]
+opencv:ml=True
+opencv:dnn=True
+opencv:objdetect=True
+opencv:imgproc=True
+opencv:imgcodecs=True
+opencv:features2d=True
+opencv:calib3d=False
+opencv:highgui=False
+opencv:videoio=False
+opencv:gapi=False
+opencv:with_wayland=False
