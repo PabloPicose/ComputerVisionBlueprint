@@ -29,6 +29,20 @@ def pWarning(text):
 def pOk(text):
     print(Color.GREEN + "[OK  ] " + Color.END + text)
 
+def createDesktopEnty(destiny: str, name: str, icon: str, exec: str):
+    pInfo("Creating the desktop entry in: " + destiny)
+    desktopEntry = f"""[Desktop Entry]
+Name={name}
+Exec={exec}
+Type=Application
+Icon={icon}
+Categories=Graphics;
+"""
+    desktopEntryPath = destiny + "/" + name + ".desktop"
+    with open(desktopEntryPath, "w") as desktopEntryFile:
+        desktopEntryFile.write(desktopEntry)
+    # Make the desktop entry file executable
+    os.chmod(desktopEntryPath, 0o755)
 
 # the function will create the AppDir structure in the destiny path
 def createAppDirStructure(destiny: str):
@@ -166,6 +180,10 @@ if __name__ == "__main__":
     parser.add_argument("-p", "--path", help="Path to executable", required=True)
     # argument -d or --destiny where the AppDir will be created
     parser.add_argument("-d", "--destiny", help="The destiny path where the AppDir will be created", required=True)
+    # argument -i or --icon where the icon will be located
+    parser.add_argument("-i", "--icon", help="The icon path", required=True)
+    # argument --appimage where the full path of the AppImage executable
+    parser.add_argument("--appimage", help="The full path of the AppImage executable", required=True)
 
     args = parser.parse_args()
 
@@ -209,6 +227,7 @@ if __name__ == "__main__":
     # copy the libraries to the AppDir
     pInfo("Copying the libraries to the AppDir")
     for lib in libs:
+        pInfo("Copying the library: " + lib + " to the AppDir path: " + args.destiny + "/usr/lib/")
         shutil.copy(lib, args.destiny + "/usr/lib/")
 
     # copy from the QtPath all the folders and its content from QtPath/plugins to AppDir/usr/plugins
@@ -219,3 +238,29 @@ if __name__ == "__main__":
     pInfo("Copying the binaries to the AppDir")
     for bin in bins:
         shutil.copy(bin, args.destiny + "/usr/bin/")
+    pOk("Binaries copied")
+    # create the desktop entry
+    createDesktopEnty(args.destiny, "ComputerVisionBlueprint", "ComputerVisionBlueprint", "ComputerVisionBlueprint")
+    pOk("Desktop entry created")
+
+    # check if the icon exists and copy into the AppDir
+    if os.path.isfile(args.icon):
+        pInfo("Copying the icon to the AppDir")
+        shutil.copy(args.icon, args.destiny + "/ComputerVisionBlueprint.png")
+        pOk("Icon copied")
+    else:
+        pWarning("The icon does not exists: " + args.icon)
+
+    # create the AppImage
+    pInfo("Creating the AppImage")
+    pathAppImageExec = args.appimage
+    # check if the executable of the appimage exists and launch it with the AppDir as parameter
+    if os.path.isfile(pathAppImageExec):
+        pInfo("The AppImage executable exists: " + pathAppImageExec)
+        pInfo("Creating the AppImage")
+        subprocess.run([pathAppImageExec, args.destiny])
+        pOk("AppImage created")
+    else:
+        pError("The AppImage executable does not exists: " + pathAppImageExec)
+        sys.exit(1)
+
