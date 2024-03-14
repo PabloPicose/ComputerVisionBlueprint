@@ -68,12 +68,26 @@ The motivation behind ComputerVisionBlueprint was to address the steep learning 
 
 This section guides you through the initial setup and building of the ComputerVisionBlueprint project. The project leverages Qt (version 6+), CMake for building, and requires OpenCV as a dependency. It also integrates the [NodeEditor](https://github.com/paceholder/nodeeditor) for graphical node-based editing.
 
+## Direct download
+For now only AppImage is available for linux. You can download the latest release from the [resources appimage](https://github.com/PabloPicose/ComputerVisionBlueprint/blob/main/resources/appimage/ComputerVisionBlueprint-x86_64.AppImage)
+
 ### Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
 - Git
 - CMake
 - Qt (version 6 or higher)
+Also available scripts for compiling and setting up the environment for Ubuntu 20.04 LTS or higher are available in the scripts directory.
+
+### Setting up in Ubuntu 20.04 LTS
+```bash
+# this may take a while
+./scripts/setup.sh
+
+# this will compile the project
+# the path to qt installation is the path to the bin directory of the qt installation, i.e /home/user/Qt/6.2.0/gcc_64/
+./scripts/compile.sh --qt <path to qt installation> --type <release or debug>
+```
 
 ### Setup
 
@@ -123,7 +137,7 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 <!-- ROADMAP -->
 ## Roadmap
-- [ ] AppImage for Linux (download and run)
+- [x] AppImage for Linux (download and run)
 
 - [ ] Windows executable
 
@@ -181,7 +195,8 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 - [ ] Draws 
     - [x] Draw rectangles
-    - [ ] Circles
+    - [ ] Draw circles
+    - [x] Draw lines
 
 See the [open issues](https://github.com/PabloPicose/ComputerVisionBlueprint/issues) for a full list of proposed features (and known issues).
 
