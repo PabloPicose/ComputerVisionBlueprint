@@ -36,7 +36,7 @@ setupConan() {
 # Function to setup dependencies for Ubuntu
 setupUbuntuDeps() {
     echo "Setting up dependencies for Ubuntu..."
-    sudo apt install -y libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-sync1 libxcb-xfixes0 libxcb-shape0 libx11-xcb1 python3-venv ninja-build build-essential cmake libxkbcommon-x11-0 libxcb-icccm4 pkg-config
+    sudo apt install -y libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-sync1 libxcb-xfixes0 libxcb-shape0 libx11-xcb1 python3-venv ninja-build build-essential cmake libxkbcommon-x11-0 libxcb-icccm4 pkg-config git
 }
 zc
 
@@ -61,3 +61,10 @@ conan install . -pr ComputerVisionRel -if .conan_rel -b missing
 conan install . -pr ComputerVisionDeb -if .conan_debug -b missing
 
 conan remove "*" -s -b -f
+
+# create the 3rdparty directory
+mkdir -p 3rdparty
+# clone inside the 3rdparty directory https://github.com/paceholder/nodeeditor.git
+cd 3rdparty
+git clone https://github.com/paceholder/nodeeditor.git
+cd ..
