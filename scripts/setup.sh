@@ -36,7 +36,7 @@ setupConan() {
 # Function to setup dependencies for Ubuntu
 setupUbuntuDeps() {
     echo "Setting up dependencies for Ubuntu..."
-    sudo apt install -y libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-sync1 libxcb-xfixes0 libxcb-shape0 libx11-xcb1 python3-venv ninja-build build-essential cmake
+    sudo apt install -y libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-sync1 libxcb-xfixes0 libxcb-shape0 libx11-xcb1 python3-venv ninja-build build-essential cmake libxkbcommon-x11-0 libxcb-icccm4 pkg-config
 }
 zc
 
