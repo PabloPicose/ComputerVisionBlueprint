@@ -69,7 +69,7 @@ The motivation behind ComputerVisionBlueprint was to address the steep learning 
 This section guides you through the initial setup and building of the ComputerVisionBlueprint project. The project leverages Qt (version 6+), CMake for building, and requires OpenCV as a dependency. It also integrates the [NodeEditor](https://github.com/paceholder/nodeeditor) for graphical node-based editing.
 
 ## Direct download
-For now only AppImage is available for linux. You can download the latest release from the [resources appimage](https://github.com/PabloPicose/ComputerVisionBlueprint/blob/main/resources/appimage/ComputerVisionBlueprint-x86_64.AppImage)
+For now only AppImage is available for linux. You can download the latest from the [tags](https://github.com/PabloPicose/ComputerVisionBlueprint/tags)
 
 ### Prerequisites
 
