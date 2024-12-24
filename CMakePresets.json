@@ -1,0 +1,30 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 26,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default-debug",
+      "hidden": true,
+      "generator": "Ninja",
+      "description": "Use this preset for Debug builds",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": ".conan/Debug/conan_toolchain.cmake"
+      }
+    },
+    {
+      "name": "default-release",
+      "hidden": true,
+      "generator": "Ninja",
+      "description": "Use this preset for Release builds",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_TOOLCHAIN_FILE": ".conan/Release/conan_toolchain.cmake"
+      }
+    }
+  ]
+}

@@ -153,7 +153,7 @@ QWidget* CannyModel::embeddedWidget() {
             m_lastImageToProcess = getImageToProcess();
             requestProcess();
         });
-        connect(m_ui->cb_gradient, &QCheckBox::stateChanged, this, [this](int state) {
+        connect(m_ui->cb_gradient, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
             m_useL2Gradient = state == Qt::Checked;
             m_lastImageToProcess = getImageToProcess();
             requestProcess();
