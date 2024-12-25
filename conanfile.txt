@@ -1,5 +1,6 @@
 [requires]
 opencv/4.8.1
+dlib/19.24.2
 
 [generators]
 CMakeDeps
@@ -17,3 +18,5 @@ opencv/*:highgui=False
 opencv/*:videoio=False
 opencv/*:gapi=False
 opencv/*:with_wayland=False
+
+dlib/*:with_sqlite3=True

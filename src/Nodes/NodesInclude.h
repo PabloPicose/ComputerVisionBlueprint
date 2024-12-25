@@ -17,6 +17,7 @@
 #include "Nodes/Basic/NumberSourceDataModel.hpp"
 #include "Nodes/Basic/SubtractionModel.h"
 
+// Images
 #include "Nodes/Images/ImageLoaderModel.hpp"
 #include "Nodes/Images/ImageShowModel.hpp"
 #include "Nodes/Images/ImageInfoModel.h"
@@ -25,6 +26,7 @@
 #include "Nodes/Images/ConvertImageToModel.h"
 #include "Nodes/Images/ScaleImageModel.h"
 #include "Nodes/Images/CutImageModel.h"
+#include "Nodes/Images/ImageFromFile.h"
 // Variables
 #include "Nodes/Variables/SizeVarModel.h"
 #include "Nodes/Variables/FileVarModel.h"
